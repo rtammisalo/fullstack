@@ -5,6 +5,15 @@ const Statistics = (props) => {
   const goodValue = 1
   const badValue = -1
 
+  if (countReviews() === 0) {
+    return (
+      <>
+        <h1>statistics</h1>
+        <p>No feedback given</p>
+      </>
+    )
+  }
+
   return (
     <>
       <h1>statistics</h1>
