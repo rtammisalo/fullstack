@@ -4,6 +4,15 @@ const Button = ({ handleClick, buttonText }) => (
   <button onClick={handleClick}>{buttonText}</button>
 )
 
+const DisplayAnecdote = (props) => (
+  <>
+    <p>
+      {props.anecdotes[props.selected]}
+    </p>
+    <DisplayVotes votes={props.points[props.selected]} />
+  </>
+)
+
 const DisplayVotes = (props) => (
   <p>
     has {props.votes} votes
@@ -30,13 +39,16 @@ const App = () => {
     tempPoints[selected]++
     setPoints(tempPoints)
   }
+  const mostVoted = points.indexOf(Math.max(...points))
 
   return (
     <div>
-      <p>{anecdotes[selected]}</p>
-      <DisplayVotes votes={points[selected]} />
+      <h1>Anecdote of the day</h1>
+      <DisplayAnecdote selected={selected} anecdotes={anecdotes} points={points} />
       <Button handleClick={handleVote} buttonText='vote' />
       <Button handleClick={selectNewAnecdote} buttonText='next anecdote' />
+      <h1>Anecdote with most votes</h1>
+      <DisplayAnecdote selected={mostVoted} anecdotes={anecdotes} points={points} />
     </div>
   )
 }
