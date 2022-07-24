@@ -1,12 +1,30 @@
 import { useState } from 'react'
 
+const Statistics = (props) => {
+  const countReviews = () => props.good + props.neutral + props.bad
+  const goodValue = 1
+  const badValue = -1
+
+  return (
+    <>
+      <h1>statistics</h1>
+      <p>
+        good {props.good}<br />
+        neutral {props.neutral}<br />
+        bad {props.bad}<br />
+        all {countReviews()}<br />
+        average {(props.good * goodValue + props.bad * badValue) / countReviews()} <br />
+        positive {props.good / countReviews() * 100} %<br />
+      </p>
+    </>
+  )
+}
+
 const App = () => {
   // tallenna napit omaan tilaansa
   const [good, setGood] = useState(0)
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
-
-  const feedback_count = () => good + neutral + bad
 
   return (
     <div>
@@ -14,15 +32,7 @@ const App = () => {
       <button onClick={() => setGood(good + 1)}>good</button>
       <button onClick={() => setNeutral(neutral + 1)}>neutral</button>
       <button onClick={() => setBad(bad + 1)}>bad</button>
-      <h1>statistics</h1>
-      <p>
-        good {good}<br />
-        neutral {neutral}<br />
-        bad {bad}<br />
-        all {good + neutral + bad}<br />
-        average {(good * 1 + bad * -1) / feedback_count()}<br />
-        positive {good / feedback_count() * 100} %<br />
-      </p>
+      <Statistics good={good} neutral={neutral} bad={bad} />
     </div>
   )
 }
