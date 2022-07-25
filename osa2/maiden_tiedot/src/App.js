@@ -28,7 +28,8 @@ const App = () => {
   return (
     <div>
       <SearchCountries newSearch={newSearch} newSearchHandle={newSearchHandle} />
-      <ShowCountries filter={newSearch} countries={countries} />
+      <ShowCountries filter={newSearch} countries={countries}
+        setNewSearch={setNewSearch} />
     </div>
   );
 }
