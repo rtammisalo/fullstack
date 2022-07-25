@@ -1,3 +1,5 @@
+import ShowWeather from "./ShowWeather"
+
 const ShowCountry = ({ country }) => (
   <>
     <h1>{country.name.common}</h1>
@@ -10,6 +12,7 @@ const ShowCountry = ({ country }) => (
     </ul>
     <img src={country.flags.png}
       alt={`Flag of ${country.name.common}`} />
+    <ShowWeather country={country} />
   </>
 )
 
