@@ -11,7 +11,8 @@ const getPersons = () => {
 
 const updatePerson = (person) => {
   return (axios
-    .put(`${baseURL}/${person.id}`, person)
+    .put(`${baseURL}/${person.id}`,
+      { name: person.name, number: person.number })
     .then(response => response.data)
   )
 }
