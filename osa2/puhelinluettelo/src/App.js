@@ -1,46 +1,11 @@
 import axios from 'axios'
 import { useState, useEffect } from 'react'
+import PersonForm from './components/PersonForm'
+import Persons from './components/Persons'
 
 const Filter = ({ filter, handleChange }) => (
   <div>
     filter shown with <input value={filter} onChange={handleChange} />
-  </div>
-)
-
-const PersonForm = (props) => (
-  <div>
-    <h2>Add a new person</h2>
-    <form onSubmit={props.addPersonHandler}>
-      <div>
-        name: <input value={props.newName} onChange={props.nameHandler} /><br />
-        number: <input value={props.newNumber} onChange={props.numberHandler} />
-      </div>
-      <div>
-        <button type="submit">add</button>
-      </div>
-    </form>
-  </div>
-)
-
-const Person = ({ person }) => (
-  <tr>
-    <td>{person.name}</td>
-    <td>{person.number}</td>
-  </tr>
-)
-
-const Persons = ({ persons, filter }) => (
-  <div>
-    <h2>Numbers</h2>
-    <table>
-      <thead></thead>
-      <tbody>
-        {persons.filter((person) => person.name.toLowerCase().includes(filter))
-          .map((person) => (
-            <Person key={person.name} person={person} />
-          ))}
-      </tbody>
-    </table>
   </div>
 )
 
@@ -62,7 +27,9 @@ const App = () => {
     event.preventDefault()
     if (persons.find((person) => person.name.toLowerCase() === newName.toLowerCase())
       === undefined) {
-      setPersons(persons.concat({ name: newName, number: newNumber }))
+      axios
+        .post('http://localhost:3001/persons', { name: newName, number: newNumber })
+        .then(response => { setPersons(persons.concat(response.data)) })
     } else {
       alert(`${newName} is already added to phonebook`)
     }
