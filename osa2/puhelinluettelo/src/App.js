@@ -35,6 +35,14 @@ const App = () => {
     setNewNumber('')
   }
 
+  const deletePerson = (selectedPerson) => {
+    if (window.confirm(`Delete ${selectedPerson.name}?`)) {
+      personsService.deletePerson(selectedPerson)
+        .catch(error => alert('Selected person does not exist'))
+      setPersons(persons.filter(person => person.id !== selectedPerson.id))
+    }
+  }
+
   const handleNameChange = (event) => {
     setNewName(event.target.value)
   }
@@ -54,7 +62,7 @@ const App = () => {
       <PersonForm addPersonHandler={addPerson}
         newName={newName} nameHandler={handleNameChange}
         newNumber={newNumber} numberHandler={handleNumberChange} />
-      <Persons persons={persons} filter={newFilter} />
+      <Persons persons={persons} filter={newFilter} deletePerson={deletePerson} />
     </div>
   )
 
