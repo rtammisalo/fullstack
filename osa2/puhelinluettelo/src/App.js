@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import personsService from './services/persons'
+import Notification from './components/Notification'
 
 const Filter = ({ filter, handleChange }) => (
   <div>
@@ -14,12 +15,20 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
+  const [notification, setNotification] = useState('')
+  const [notificationSuccess, setNotificationSuccess] = useState(false)
 
   useEffect(() => {
     personsService
       .getPersons()
       .then(newPersons => { setPersons(newPersons) })
   }, [])
+
+  const notifyUser = (message, success) => {
+    setNotification(message)
+    setNotificationSuccess(success)
+    setTimeout(() => setNotification(''), 5000)
+  }
 
   const updatePerson = (inputPerson) => {
     if (window.confirm(`${inputPerson.name} is already added to the phonebook, \
@@ -31,6 +40,7 @@ replace the old number with a new one?`)) {
             person.id === updatedPerson.id ? updatedPerson : person
           ))
         })
+      notifyUser(`Updated number for ${inputPerson.name}`, true)
     }
   }
 
@@ -44,6 +54,7 @@ replace the old number with a new one?`)) {
       personsService
         .createPerson(inputPerson)
         .then(newPerson => { setPersons(persons.concat(newPerson)) })
+      notifyUser(`Added ${inputPerson.name}`, true)
     } else {
       inputPerson = { ...findResult, number: inputPerson.number }
       updatePerson(inputPerson)
@@ -57,6 +68,7 @@ replace the old number with a new one?`)) {
       personsService.deletePerson(selectedPerson)
         .catch(error => alert('Selected person does not exist'))
       setPersons(persons.filter(person => person.id !== selectedPerson.id))
+      notifyUser(`Removed ${selectedPerson.name}`, true)
     }
   }
 
@@ -75,6 +87,7 @@ replace the old number with a new one?`)) {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notification} success={notificationSuccess} />
       <Filter filter={newFilter} handleChange={handleFilterChange} />
       <PersonForm addPersonHandler={addPerson}
         newName={newName} nameHandler={handleNameChange}
