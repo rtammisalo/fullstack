@@ -30,17 +30,25 @@ const App = () => {
     setTimeout(() => setNotification(''), 5000)
   }
 
+  const personNotFoundMessage = (person) => (`Information of ${person.name} ` +
+    `has already been removed from server`)
+
   const updatePerson = (inputPerson) => {
-    if (window.confirm(`${inputPerson.name} is already added to the phonebook, \
-replace the old number with a new one?`)) {
+    if (window.confirm(`${inputPerson.name} is already added to the phonebook, ` +
+      `replace the old number with a new one?`)) {
       personsService
         .updatePerson(inputPerson)
         .then(updatedPerson => {
           setPersons(persons.map(person =>
             person.id === updatedPerson.id ? updatedPerson : person
           ))
+          notifyUser(`Updated number for ${inputPerson.name}`, true)
         })
-      notifyUser(`Updated number for ${inputPerson.name}`, true)
+        .catch(error => {
+          notifyUser(personNotFoundMessage(inputPerson), false)
+          setPersons(persons.filter(p => p.id !== inputPerson.id))
+        })
+
     }
   }
 
@@ -66,9 +74,11 @@ replace the old number with a new one?`)) {
   const deletePerson = (selectedPerson) => {
     if (window.confirm(`Delete ${selectedPerson.name}?`)) {
       personsService.deletePerson(selectedPerson)
-        .catch(error => alert('Selected person does not exist'))
+        .then(data => {
+          notifyUser(`Removed ${selectedPerson.name}`, true)
+        })
+        .catch(error => notifyUser(personNotFoundMessage(selectedPerson), false))
       setPersons(persons.filter(person => person.id !== selectedPerson.id))
-      notifyUser(`Removed ${selectedPerson.name}`, true)
     }
   }
 
