@@ -61,8 +61,18 @@ const App = () => {
     if (findResult === undefined) {
       personsService
         .createPerson(inputPerson)
-        .then(newPerson => { setPersons(persons.concat(newPerson)) })
-      notifyUser(`Added ${inputPerson.name}`, true)
+        .then(newPerson => {
+          setPersons(persons.concat(newPerson))
+          notifyUser(`Added ${inputPerson.name}`, true)
+        })
+        .catch(error => {
+          if (error.response) {
+            notifyUser(error.response.data, false)
+          } else {
+            notifyUser('Add failed', false)
+          }
+        })
+
     } else {
       inputPerson = { ...findResult, number: inputPerson.number }
       updatePerson(inputPerson)
