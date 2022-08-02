@@ -90,6 +90,35 @@ test('returned blogs have an id field', async () => {
   expect(blogs[0].id).toBeDefined()
 })
 
+const addNewBlog = async () => {
+  const newBlog = {
+    title: 'Are ghosts real?',
+    author: 'Charles Mort',
+    url: 'http://www.darkcatacomb.com/blog/are_ghosts_real.html',
+    likes: 12
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const blogs = await blogsInDb()
+
+  return blogs
+}
+
+test('POST request gets added to the database', async () => {
+  const blogs = await addNewBlog()
+  expect(blogs.map(blog => blog.title)).toContain('Are ghosts real?')
+})
+
+test('POST request adds only one blog to the database', async () => {
+  const blogs = await addNewBlog()
+  expect(blogs).toHaveLength(initialBlogs.length + 1)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
