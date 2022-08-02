@@ -45,10 +45,19 @@ const App = () => {
           notifyUser(`Updated number for ${inputPerson.name}`, true)
         })
         .catch(error => {
-          notifyUser(personNotFoundMessage(inputPerson), false)
-          setPersons(persons.filter(p => p.id !== inputPerson.id))
+          switch (error.request.status) {
+            case 404:
+              notifyUser(personNotFoundMessage(inputPerson), false)
+              setPersons(persons.filter(p => p.id !== inputPerson.id))
+              break
+            case 400:
+              if (error.response) {
+                notifyUser(error.response.data, false)
+              }
+              break
+            default:
+          }
         })
-
     }
   }
 
