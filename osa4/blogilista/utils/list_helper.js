@@ -27,9 +27,21 @@ const mostBlogs = (blogs) => {
   return result ? { author: result[0], blogs: result[1] } : undefined
 }
 
+const sumLikes = (sum, blog) => sum + blog.likes
+
+const mostLikes = (blogs) => {
+  let result = lodash(blogs)
+    .groupBy(blog => blog.author)
+    .entries()
+    .maxBy(pair => pair[1].reduce(sumLikes, 0))
+
+  return result ? { author: result[0], likes: result[1].reduce(sumLikes, 0) } : undefined
+}
+
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
-  mostBlogs
+  mostBlogs,
+  mostLikes
 }
