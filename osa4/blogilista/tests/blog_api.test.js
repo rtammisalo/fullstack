@@ -97,6 +97,11 @@ const unaddedBlog = {
   likes: 12
 }
 
+const malformattedBlog = {
+  author: 'Urho Kekkonen',
+  likes: 5
+}
+
 const addNewBlog = async (inputBlog) => {
   await api
     .post('/api/blogs')
@@ -117,6 +122,13 @@ test('POST request gets added to the database', async () => {
 test('POST request adds only one blog to the database', async () => {
   const blogs = await addNewBlog(unaddedBlog)
   expect(blogs).toHaveLength(initialBlogs.length + 1)
+})
+
+test('adding malformatted blog receives response with code 400', async () => {
+  await api
+    .post('/api/blogs')
+    .send(malformattedBlog)
+    .expect(400)
 })
 
 test('Adding a new blog with no likes-value defaults to zero likes', async () => {
