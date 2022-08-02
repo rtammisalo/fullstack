@@ -90,17 +90,17 @@ test('returned blogs have an id field', async () => {
   expect(blogs[0].id).toBeDefined()
 })
 
-const addNewBlog = async () => {
-  const newBlog = {
-    title: 'Are ghosts real?',
-    author: 'Charles Mort',
-    url: 'http://www.darkcatacomb.com/blog/are_ghosts_real.html',
-    likes: 12
-  }
+const unaddedBlog = {
+  title: 'Are ghosts real?',
+  author: 'Charles Mort',
+  url: 'http://www.darkcatacomb.com/blog/are_ghosts_real.html',
+  likes: 12
+}
 
+const addNewBlog = async (inputBlog) => {
   await api
     .post('/api/blogs')
-    .send(newBlog)
+    .send(inputBlog)
     .expect(201)
     .expect('Content-Type', /application\/json/)
 
@@ -110,13 +110,20 @@ const addNewBlog = async () => {
 }
 
 test('POST request gets added to the database', async () => {
-  const blogs = await addNewBlog()
+  const blogs = await addNewBlog(unaddedBlog)
   expect(blogs.map(blog => blog.title)).toContain('Are ghosts real?')
 })
 
 test('POST request adds only one blog to the database', async () => {
-  const blogs = await addNewBlog()
+  const blogs = await addNewBlog(unaddedBlog)
   expect(blogs).toHaveLength(initialBlogs.length + 1)
+})
+
+test('Adding a new blog with no likes-value defaults to zero likes', async () => {
+  const blog = { ...unaddedBlog }
+  delete blog.likes
+  const blogs = await addNewBlog(blog)
+  expect(blogs.find(blog => blog.title === 'Are ghosts real?').likes).toBe(0)
 })
 
 afterAll(() => {
