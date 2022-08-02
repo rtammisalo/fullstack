@@ -2,7 +2,7 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-    "title": "Ohjelmoinnista",
+    "title": "Ohjelmoinnista, osa 1",
     "author": "Ada Lovelace",
     "url": "www.blogitus.fi/ada/ohj1",
     "likes": 3
