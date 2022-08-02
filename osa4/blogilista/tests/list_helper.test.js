@@ -79,7 +79,7 @@ describe('total likes', () => {
   })
 })
 
-describe('favorite blog when', () => {
+describe('favorite blog', () => {
   test('when list has only one blog is the only blog', () => {
     const result = listHelper.favoriteBlog(listWithOneBlog)
     expect(result).toEqual(listWithOneBlog[0])
@@ -93,5 +93,22 @@ describe('favorite blog when', () => {
   test('when list is empty should be null', () => {
     const result = listHelper.favoriteBlog([])
     expect(result).toEqual(null)
+  })
+})
+
+describe('most blogs by author', () => {
+  test('when list has only one blog is the only author with one blog', () => {
+    const result = listHelper.mostBlogs(listWithOneBlog)
+    expect(result).toEqual({ author: 'Edsger W. Dijkstra', blogs: 1 })
+  })
+
+  test('when list has multiple blogs is the author with most blogs in the list', () => {
+    const result = listHelper.mostBlogs(blogs)
+    expect(result).toEqual({ author: 'Robert C. Martin', blogs: 3 })
+  })
+
+  test('when list is empty should be undefined', () => {
+    const result = listHelper.mostBlogs([])
+    expect(result).toEqual(undefined)
   })
 })
