@@ -85,6 +85,11 @@ test('returned blogs contain a blog in the database', async () => {
     .toContain('Type wars')
 })
 
+test('returned blogs have an id field', async () => {
+  const blogs = await blogsInDb()
+  expect(blogs[0].id).toBeDefined()
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
