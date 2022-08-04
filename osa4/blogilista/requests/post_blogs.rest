@@ -29,3 +29,15 @@ Content-Type: application/json
     "url": "www.blogitus.fi/ada/ohj3",
     "likes": 12
 }
+
+###
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: bearer token
+
+{
+    "title": "Go To Statement Considered Harmful",
+    "author": "Edsger W. Dijkstra",
+    "url": "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
+    "likes": 23
+}
