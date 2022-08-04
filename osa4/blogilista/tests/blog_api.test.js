@@ -104,6 +104,36 @@ describe('when there are blogs in the database', () => {
         .expect(404)
     })
   })
+
+  describe('updating a blog', () => {
+    test('updates the blog in the database', async () => {
+      const selectedBlog = await BlogModel.findOne({ title: 'React patterns' })
+      selectedBlog.likes = 200
+
+      await api
+        .put(`/api/blogs/${selectedBlog.id}`)
+        .send(selectedBlog)
+        .expect(200)
+
+      const updatedBlog = await BlogModel.findOne({ title: 'React patterns' })
+
+      expect(updatedBlog.likes).toBe(200)
+    })
+
+    test('with a malformatted id returns code 400', async () => {
+      await api
+        .put('/api/blogs/1')
+        .expect(400)
+    })
+
+    test('with a nonexistant id returns code 404', async () => {
+      const unusedId = await helpers.nonExistingId()
+      await api
+        .put(`/api/blogs/${unusedId}`)
+        .send(helpers.unaddedBlog)
+        .expect(404)
+    })
+  })
 })
 
 afterAll(() => {
