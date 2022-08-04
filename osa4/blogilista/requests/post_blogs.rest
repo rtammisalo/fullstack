@@ -18,3 +18,14 @@ Content-Type: application/json
     "url": "www.blogitus.fi/ada/ohj2",
     "likes": 6
 }
+
+###
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+    "title": "Ohjelmoinnista, osa 3",
+    "author": "Ada Lovelace",
+    "url": "www.blogitus.fi/ada/ohj3",
+    "likes": 12
+}
