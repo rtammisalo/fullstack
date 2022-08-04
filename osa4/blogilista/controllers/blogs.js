@@ -3,6 +3,16 @@ const jwt = require('jsonwebtoken')
 const BlogModel = require('../models/blog')
 const UserModel = require('../models/user')
 
+const verifyToken = (token) => {
+  const decodedToken = jwt.verify(token, process.env.SECRET)
+
+  if (!decodedToken.id) {
+    throw { name: 'JsonWebTokenError' }
+  }
+
+  return decodedToken
+}
+
 blogsRouter.get('/', async (request, response) => {
   const blogs = await BlogModel
     .find({}).populate('user', { username: 1, name: 1 })
@@ -11,11 +21,7 @@ blogsRouter.get('/', async (request, response) => {
 
 blogsRouter.post('/', async (request, response) => {
   const blog = new BlogModel(request.body)
-  const decodedToken = jwt.verify(request.token, process.env.SECRET)
-
-  if (!decodedToken.id) {
-    throw { name: 'JsonWebTokenError' }
-  }
+  const decodedToken = verifyToken(request.token)
 
   const user = await UserModel.findById(decodedToken.id)
 
@@ -29,10 +35,19 @@ blogsRouter.post('/', async (request, response) => {
 })
 
 blogsRouter.delete('/:id', async (request, response) => {
-  const removedBlog = await BlogModel.findByIdAndRemove(request.params.id)
-  if (!removedBlog) {
+  const decodedToken = verifyToken(request.token)
+  const blog = await BlogModel.findById(request.params.id)
+
+  if (!blog) {
     return response.status(404).end()
   }
+
+  if (blog && blog.user.toString() !== decodedToken.id) {
+    return response.status(401).end()
+  }
+
+  await blog.delete()
+
   response.status(204).end()
 })
 
