@@ -16,3 +16,24 @@ Content-Type: application/json
     "password": "huonosalasana",
     "name": "Isaac Asimov"
 }
+
+
+### Small name
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+    "username": "ia",
+    "password": "huonosalasana",
+    "name": "Isaac Asimov"
+}
+
+### Small password
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+    "username": "unused",
+    "password": "hs",
+    "name": "Isaac Asimov"
+}
