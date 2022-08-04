@@ -1,4 +1,6 @@
+const jwt = require('jsonwebtoken')
 require('./config')
+const UserModel = require('../models/user')
 
 const errorHandler = (error, request, response, next) => {
   if (process.env.NODE_ENV !== 'test') {
@@ -12,6 +14,8 @@ const errorHandler = (error, request, response, next) => {
       return response.status(400).json(error.message)
     case 'JsonWebTokenError':
       return response.status(401).json('missing or invalid token')
+    case 'InvalidUserError':
+      return response.status(404)
   }
 
   next(error)
@@ -26,6 +30,26 @@ const tokenExtractor = (request, response, next) => {
   next()
 }
 
-const middleware = { errorHandler, tokenExtractor }
+const userExtractor = async (request, response, next) => {
+  if (request.method.toUpperCase() !== 'POST'
+    && request.method.toUpperCase() !== 'DELETE') {
+    return next()
+  }
+
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+
+  if (!decodedToken.id) {
+    throw { name: 'JsonWebTokenError' }
+  }
+
+  request.user = await UserModel.findById(decodedToken.id)
+  if (!request.user) {
+    throw { name: 'InvalidUserError' }
+  }
+
+  next()
+}
+
+const middleware = { errorHandler, tokenExtractor, userExtractor }
 
 module.exports = middleware
