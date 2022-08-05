@@ -12,6 +12,7 @@ const LoginForm = ({ setUser }) => {
     try {
       const user = await loginService.login({ username, password })
       setUser(user)
+      window.localStorage.setItem('loggedUser', JSON.stringify(user))
     } catch (exception) {
       console.log('handleLogin error')
     }
