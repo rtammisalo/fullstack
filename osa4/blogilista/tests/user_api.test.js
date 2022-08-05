@@ -1,9 +1,7 @@
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
-const UserModel = require('../models/user')
 const helpers = require('./test_helpers')
-const bcrypt = require('bcrypt')
 
 const api = supertest(app)
 
@@ -19,13 +17,7 @@ const addNewUser = async (inputUser, expectedStatus) => {
 
 describe('when there is already a registered user', () => {
   beforeEach(async () => {
-    await UserModel.deleteMany({})
-
-    for (let user of helpers.initialUsers) {
-      user.passwordHash = await bcrypt.hash(user.password, 10)
-    }
-
-    await UserModel.insertMany(helpers.initialUsers)
+    await helpers.insertUsers()
   })
 
   describe('and adding a new user', () => {

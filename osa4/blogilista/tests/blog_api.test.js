@@ -1,14 +1,21 @@
 const mongoose = require('mongoose')
+const jwt = require('jsonwebtoken')
 const supertest = require('supertest')
 const app = require('../app')
 const BlogModel = require('../models/blog')
+const UserModel = require('../models/user')
 const helpers = require('./test_helpers')
 
 const api = supertest(app)
 
-const addNewBlog = async (inputBlog) => {
+const addNewBlog = async (inputBlog, token) => {
+  if (!token) {
+    token = await createToken()
+  }
+
   await api
     .post('/api/blogs')
+    .set('Authorization', `bearer ${token}`)
     .send(inputBlog)
     .expect(201)
     .expect('Content-Type', /application\/json/)
@@ -18,8 +25,26 @@ const addNewBlog = async (inputBlog) => {
   return blogs
 }
 
+const createToken = async (user) => {
+  if (!user) {
+    user = (await UserModel.find({}))[0]
+  }
+
+  const token = jwt.sign({
+    username: user.username,
+    id: user._id
+  }, process.env.SECRET)
+
+  return token
+}
+
 describe('when there are blogs in the database', () => {
   beforeEach(async () => {
+    await helpers.insertUsers()
+    const user = (await UserModel.find({}))[0]
+    for (let blog of helpers.initialBlogs) {
+      blog.user = user._id
+    }
     await BlogModel.deleteMany({})
     await BlogModel.insertMany(helpers.initialBlogs)
   })
@@ -51,40 +76,59 @@ describe('when there are blogs in the database', () => {
   })
 
   describe('adding a new blog', () => {
-    test('POST request gets added to the database', async () => {
+    test('new blog gets added to the database', async () => {
       const blogs = await addNewBlog(helpers.unaddedBlog)
 
       expect(blogs.map(blog => blog.title)).toContain('Are ghosts real?')
     })
 
-    test('POST request adds only one blog to the database', async () => {
+    test('adds only one blog to the database', async () => {
       const blogs = await addNewBlog(helpers.unaddedBlog)
 
       expect(blogs).toHaveLength(helpers.initialBlogs.length + 1)
     })
 
-    test('adding malformatted blog receives response with code 400', async () => {
+    test('with malformatted data receives response with code 400', async () => {
+      const token = await createToken()
+
       await api
         .post('/api/blogs')
+        .set('Authorization', `bearer ${token}`)
         .send(helpers.malformattedBlog)
         .expect(400)
     })
 
-    test('Adding a new blog with no likes-value defaults to zero likes', async () => {
+    test('with no likes-value defaults to zero likes', async () => {
       const blog = { ...helpers.unaddedBlog }
       delete blog.likes
       const blogs = await addNewBlog(blog)
 
       expect(blogs.find(blog => blog.title === 'Are ghosts real?').likes).toBe(0)
     })
+
+    test('without a token does not add the blog', async () => {
+      const response = await api
+        .post('/api/blogs')
+        .send(helpers.unaddedBlog)
+        .expect(401)
+        .expect('Content-Type', /application\/json/)
+
+      expect(response.text).toContain('missing or invalid token')
+
+      const blogs = await helpers.blogsInDb()
+
+      expect(blogs.map(b => b.title)).not.toContain('Are ghosts real?')
+    })
   })
 
   describe('removing a blog', () => {
     test('removes it from the database', async () => {
       const selectedBlog = await BlogModel.findOne({ title: 'React patterns' })
+      const token = await createToken()
 
       await api
         .delete(`/api/blogs/${selectedBlog.id}`)
+        .set('Authorization', `bearer ${token}`)
         .expect(204)
       const blogs = await helpers.blogsInDb()
 
@@ -92,16 +136,33 @@ describe('when there are blogs in the database', () => {
     })
 
     test('with a malformatted id returns code 400', async () => {
+      const token = await createToken()
+
       await api
         .delete('/api/blogs/1')
+        .set('Authorization', `bearer ${token}`)
         .expect(400)
     })
 
     test('with a nonexistant id returns code 404', async () => {
       const unusedId = await helpers.nonExistingId()
+      const token = await createToken()
+
       await api
         .delete(`/api/blogs/${unusedId}`)
+        .set('Authorization', `bearer ${token}`)
         .expect(404)
+    })
+
+    test('without a token does not delete the blog', async () => {
+      const selectedBlog = await BlogModel.findOne({ title: 'React patterns' })
+
+      await api
+        .delete(`/api/blogs/${selectedBlog.id}`)
+        .expect(401)
+      const blogs = await helpers.blogsInDb()
+
+      expect(blogs.map(blog => blog.title)).toContain('React patterns')
     })
   })
 

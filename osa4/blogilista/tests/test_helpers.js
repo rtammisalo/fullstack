@@ -1,5 +1,6 @@
 const BlogModel = require('../models/blog')
 const UserModel = require('../models/user')
+const bcrypt = require('bcrypt')
 
 const initialUsers = [
   {
@@ -78,8 +79,17 @@ const malformattedBlog = {
   likes: 5
 }
 
+const nonExistingUserId = async () => {
+  const user = new UserModel(unaddedUser)
+  user.passwordHash = await bcrypt.hash(unaddedUser.password, 10)
+  await user.save()
+  await user.remove()
+  return user._id
+}
+
 const nonExistingId = async () => {
   const blog = new BlogModel(unaddedBlog)
+  blog.user = await nonExistingUserId()
   await blog.save()
   await blog.remove()
   return blog.id.toString()
@@ -96,6 +106,16 @@ const usersInDb = async () => {
   return users.map(u => u.toJSON())
 }
 
+const insertUsers = async () => {
+  await UserModel.deleteMany({})
+
+  for (let user of initialUsers) {
+    user.passwordHash = await bcrypt.hash(user.password, 10)
+  }
+
+  await UserModel.insertMany(initialUsers)
+}
+
 module.exports = {
   blogsInDb,
   usersInDb,
@@ -105,4 +125,5 @@ module.exports = {
   initialBlogs,
   initialUsers,
   unaddedUser,
+  insertUsers,
 }
