@@ -35,10 +35,10 @@ const Blogs = ({ user, blogs, setBlogs, showNotification }) => {
 }
 
 Blogs.propTypes = {
-  user: PropTypes.object,
-  blogs: PropTypes.array,
-  setBlogs: PropTypes.func,
-  showNotification: PropTypes.func
+  user: PropTypes.object.isRequired,
+  blogs: PropTypes.array.isRequired,
+  setBlogs: PropTypes.func.isRequired,
+  showNotification: PropTypes.func.isRequired
 }
 
 export default Blogs

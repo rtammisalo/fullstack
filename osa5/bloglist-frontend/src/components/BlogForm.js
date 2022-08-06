@@ -47,8 +47,8 @@ const BlogForm = ({ addBlog, showNotification }) => {
 }
 
 BlogForm.propTypes = {
-  addBlog: PropTypes.func,
-  showNotification: PropTypes.func
+  addBlog: PropTypes.func.isRequired,
+  showNotification: PropTypes.func.isRequired
 }
 
 export default BlogForm
