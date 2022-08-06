@@ -1,0 +1,23 @@
+import React from 'react'
+import PropTypes from 'prop-types'
+
+const LoginInfo = ({ user, setUser }) => {
+  const logout = () => {
+    window.localStorage.removeItem('loggedUser')
+    setUser(null)
+  }
+
+  return (
+    <div>
+      {user.name} logged in
+      <button onClick={logout}>logout</button>
+    </div>
+  )
+}
+
+LoginInfo.propTypes = {
+  user: PropTypes.object,
+  setUser: PropTypes.func
+}
+
+export default LoginInfo

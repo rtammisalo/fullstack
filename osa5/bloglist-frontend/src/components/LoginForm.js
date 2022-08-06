@@ -16,6 +16,7 @@ const LoginForm = ({ setUser, showNotification }) => {
     } catch (exception) {
       showNotification(exception.response.data, true)
     }
+
     setUsername('')
     setPassword('')
   }
