@@ -40,6 +40,7 @@ blogsRouter.put('/:id', async (request, response) => {
   const blog = { ...request.body }
   const updatedBlog = await BlogModel
     .findByIdAndUpdate(request.params.id, blog, { new: true })
+    .populate('user', { username: 1, name: 1 })
 
   if (!updatedBlog) {
     return response.status(404).end()
