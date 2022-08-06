@@ -1,11 +1,36 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
-const Blog = ({ blog }) => (
-  <div>
-    {blog.title} {blog.author}
-  </div>
-)
+const Blog = ({ blog }) => {
+  const [viewButtonLabel, setViewButtonLabel] = useState('view')
+  const blogStyle = {
+    paddingTop: 10,
+    paddingLeft: 2,
+    border: 'solid',
+    borderWidth: 1,
+    marginBottom: 5
+  }
+
+  const showAll = () => {
+    viewButtonLabel === 'view' ?
+      setViewButtonLabel('hide') :
+      setViewButtonLabel('view')
+  }
+
+  return (
+    <div style={blogStyle}>
+      {blog.title} {blog.author}
+      <button onClick={showAll}>{viewButtonLabel}</button><br />
+      {viewButtonLabel === 'hide' && (
+        <div>
+          {blog.url}<br />
+          likes {blog.likes} <button>like</button><br />
+          {blog.user.name}
+        </div>
+      )}
+    </div>
+  )
+}
 
 Blog.propTypes = {
   blog: PropTypes.object
