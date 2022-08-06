@@ -23,8 +23,7 @@ const App = () => {
 
   useEffect(() => {
     if (user) {
-      blogService.getAll().then(blogs =>
-        setBlogs(blogs.filter(b => b.user.username === user.username)))
+      blogService.getAll().then(blogs => setBlogs(blogs))
     } else {
       setBlogs([])
     }
@@ -62,7 +61,10 @@ const App = () => {
           <Togglable showLabel='new note' hideLabel='cancel' ref={blogFormRef}>
             <BlogForm addBlog={addBlog} showNotification={showNotification} />
           </Togglable>
-          <Blogs blogs={blogs} setBlogs={setBlogs} user={user} />
+          <Blogs blogs={blogs}
+            setBlogs={setBlogs}
+            user={user}
+            showNotification={showNotification} />
         </div>
       }
     </div>

@@ -30,4 +30,11 @@ const update = (user, blog) => {
     .then(response => response.data))
 }
 
-export default { getAll, create, update }
+const remove = (user, blog) => {
+  const config = getTokenConfig(user)
+
+  return (axios
+    .delete(`${baseUrl}/${blog.id}`, config))
+}
+
+export default { getAll, create, update, remove }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
-const Blog = ({ blog, likeBlog }) => {
+const Blog = ({ blog, likeBlog, removeBlog, user }) => {
   const [viewButtonLabel, setViewButtonLabel] = useState('view')
   const blogStyle = {
     paddingTop: 10,
@@ -25,7 +25,13 @@ const Blog = ({ blog, likeBlog }) => {
         <div>
           {blog.url}<br />
           likes {blog.likes} <button onClick={() => likeBlog(blog)}>like</button><br />
-          {blog.user.name}
+          {blog.user.name}<br />
+          {user.username === blog.user.username &&
+            <button
+              onClick={() => removeBlog(blog)}
+              style={{ backgroundColor: 'lightblue' }}> remove
+            </button>
+          }
         </div>
       )}
     </div>
@@ -34,7 +40,9 @@ const Blog = ({ blog, likeBlog }) => {
 
 Blog.propTypes = {
   blog: PropTypes.object,
-  likeBlog: PropTypes.func
+  likeBlog: PropTypes.func,
+  removeBlog: PropTypes.func,
+  user: PropTypes.object
 }
 
 export default Blog
