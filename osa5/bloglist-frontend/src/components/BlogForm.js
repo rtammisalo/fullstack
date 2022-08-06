@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import blogService from '../services/blogs'
 
-const BlogForm = ({ user, showNewBlog }) => {
+const BlogForm = ({ user, showNewBlog, showNotification }) => {
   const [blogTitle, setBlogTitle] = useState('')
   const [blogAuthor, setBlogAuthor] = useState('')
   const [blogUrl, setBlogUrl] = useState('')
@@ -19,11 +19,14 @@ const BlogForm = ({ user, showNewBlog }) => {
     blogService
       .create(user, blog)
       .then((createdBlog) => {
-        console.log('blog added')
+        showNotification(`a new blog ${createdBlog.title} by ${createdBlog.author} added`)
         setBlogTitle('')
         setBlogAuthor('')
         setBlogUrl('')
         showNewBlog(createdBlog)
+      })
+      .catch(error => {
+        showNotification(error.response.data, true)
       })
   }
 
@@ -54,7 +57,8 @@ const BlogForm = ({ user, showNewBlog }) => {
 
 BlogForm.propTypes = {
   user: PropTypes.object,
-  showNewBlog: PropTypes.func
+  showNewBlog: PropTypes.func,
+  showNotification: PropTypes.func
 }
 
 export default BlogForm

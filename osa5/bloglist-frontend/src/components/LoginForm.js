@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import loginService from '../services/login'
 
-const LoginForm = ({ setUser }) => {
+const LoginForm = ({ setUser, showNotification }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -14,7 +14,7 @@ const LoginForm = ({ setUser }) => {
       setUser(user)
       window.localStorage.setItem('loggedUser', JSON.stringify(user))
     } catch (exception) {
-      console.log('handleLogin error')
+      showNotification(exception.response.data, true)
     }
     setUsername('')
     setPassword('')
@@ -43,7 +43,8 @@ const LoginForm = ({ setUser }) => {
 }
 
 LoginForm.propTypes = {
-  setUser: PropTypes.func
+  setUser: PropTypes.func,
+  showNotification: PropTypes.func
 }
 
 export default LoginForm

@@ -4,7 +4,7 @@ import Blog from '../components/Blog'
 import BlogForm from './BlogForm'
 import blogService from '../services/blogs'
 
-const Blogs = ({ user, setUser }) => {
+const Blogs = ({ user, setUser, showNotification }) => {
   const [blogs, setBlogs] = useState([])
 
   useEffect(() => {
@@ -25,7 +25,8 @@ const Blogs = ({ user, setUser }) => {
         {user.name} logged in
         <button onClick={logout}>logout</button>
       </p>
-      <BlogForm user={user} showNewBlog={(blog) => setBlogs(blogs.concat(blog))} />
+      <BlogForm user={user} showNewBlog={(blog) => setBlogs(blogs.concat(blog))}
+        showNotification={showNotification} />
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
@@ -35,7 +36,8 @@ const Blogs = ({ user, setUser }) => {
 
 Blogs.propTypes = {
   user: PropTypes.object,
-  setUser: PropTypes.func
+  setUser: PropTypes.func,
+  showNotification: PropTypes.func
 }
 
 export default Blogs
