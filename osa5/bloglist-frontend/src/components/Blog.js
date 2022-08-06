@@ -1,9 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import blogService from '../services/blogs'
 
-const Blog = ({ user, blog }) => {
-  const [viewedBlog, setViewedBlog] = useState(blog)
+const Blog = ({ blog, likeBlog }) => {
   const [viewButtonLabel, setViewButtonLabel] = useState('view')
   const blogStyle = {
     paddingTop: 10,
@@ -19,25 +17,15 @@ const Blog = ({ user, blog }) => {
       setViewButtonLabel('view')
   }
 
-  const likeBlog = () => {
-    blog.likes += 1
-    blogService
-      .update(user, blog)
-      .then(updatedBlog => {
-        blog.likes = updatedBlog.likes
-        setViewedBlog(updatedBlog)
-      })
-  }
-
   return (
     <div style={blogStyle}>
-      {viewedBlog.title} {viewedBlog.author}
+      {blog.title} {blog.author}
       <button onClick={showAll}>{viewButtonLabel}</button><br />
       {viewButtonLabel === 'hide' && (
         <div>
-          {viewedBlog.url}<br />
-          likes {viewedBlog.likes} <button onClick={likeBlog}>like</button><br />
-          {viewedBlog.user.name}
+          {blog.url}<br />
+          likes {blog.likes} <button onClick={() => likeBlog(blog)}>like</button><br />
+          {blog.user.name}
         </div>
       )}
     </div>
@@ -45,8 +33,8 @@ const Blog = ({ user, blog }) => {
 }
 
 Blog.propTypes = {
-  user: PropTypes.object,
-  blog: PropTypes.object
+  blog: PropTypes.object,
+  likeBlog: PropTypes.func
 }
 
 export default Blog

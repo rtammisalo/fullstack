@@ -62,7 +62,7 @@ const App = () => {
           <Togglable showLabel='new note' hideLabel='cancel' ref={blogFormRef}>
             <BlogForm addBlog={addBlog} showNotification={showNotification} />
           </Togglable>
-          <Blogs blogs={blogs} user={user} />
+          <Blogs blogs={blogs} setBlogs={setBlogs} user={user} />
         </div>
       }
     </div>
