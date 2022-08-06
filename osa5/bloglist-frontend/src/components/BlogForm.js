@@ -1,21 +1,30 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
-const BlogForm = ({ handleCreateBlog }) => {
+const BlogForm = ({ addBlog, showNotification }) => {
   const [blogTitle, setBlogTitle] = useState('')
   const [blogAuthor, setBlogAuthor] = useState('')
   const [blogUrl, setBlogUrl] = useState('')
 
-  const clear = () => {
-    setBlogAuthor('')
-    setBlogTitle('')
-    setBlogUrl('')
+  const handleCreateBlog = (event) => {
+    event.preventDefault()
+
+    addBlog({ blogTitle, blogAuthor, blogUrl })
+      .then(createdBlog => {
+        showNotification(`a new blog ${createdBlog.title} by ${createdBlog.author} added`)
+        setBlogAuthor('')
+        setBlogTitle('')
+        setBlogUrl('')
+      })
+      .catch(error => {
+        showNotification(error.response.data, true)
+      })
   }
 
   return (
     <div>
       <h2>create new</h2>
-      <form onSubmit={handleCreateBlog({ blogTitle, blogAuthor, blogUrl, clear })}>
+      <form onSubmit={handleCreateBlog}>
         <div>
           Title:
           <input type='text' name='title' value={blogTitle}
@@ -38,7 +47,8 @@ const BlogForm = ({ handleCreateBlog }) => {
 }
 
 BlogForm.propTypes = {
-  handleCreateBlog: PropTypes.func
+  addBlog: PropTypes.func,
+  showNotification: PropTypes.func
 }
 
 export default BlogForm

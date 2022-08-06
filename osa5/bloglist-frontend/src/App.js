@@ -35,26 +35,20 @@ const App = () => {
     setTimeout(() => setUserNotification(null), 5000)
   }
 
-  const handleCreateBlog = (blogFields) => (event) => {
-    event.preventDefault()
-
+  const addBlog = (blog) => {
     const blogData = {
-      title: blogFields.blogTitle,
-      author: blogFields.blogAuthor,
-      url: blogFields.blogUrl
+      title: blog.blogTitle,
+      author: blog.blogAuthor,
+      url: blog.blogUrl
     }
 
-    blogService
+    return (blogService
       .create(user, blogData)
-      .then((createdBlog) => {
-        showNotification(`a new blog ${createdBlog.title} by ${createdBlog.author} added`)
+      .then(createdBlog => {
         setBlogs(blogs.concat(createdBlog))
-        blogFields.clear()
         blogFormRef.current.toggleVisibility()
-      })
-      .catch(error => {
-        showNotification(error.response.data, true)
-      })
+        return createdBlog
+      }))
   }
 
   return (
@@ -66,7 +60,7 @@ const App = () => {
         <div>
           <LoginInfo user={user} setUser={setUser} />
           <Togglable showLabel='new note' hideLabel='cancel' ref={blogFormRef}>
-            <BlogForm handleCreateBlog={handleCreateBlog} />
+            <BlogForm addBlog={addBlog} showNotification={showNotification} />
           </Togglable>
           <Blogs blogs={blogs} />
         </div>
