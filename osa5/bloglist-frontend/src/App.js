@@ -63,7 +63,7 @@ const App = () => {
       {user &&
         <div>
           <LoginInfo user={user} setUser={setUser} />
-          <Togglable showLabel='new note' hideLabel='cancel' ref={blogFormRef}>
+          <Togglable showLabel='new blog' hideLabel='cancel' ref={blogFormRef}>
             <BlogForm addBlog={addBlog} showNotification={showNotification} />
           </Togglable>
           <Blogs blogs={blogs}
