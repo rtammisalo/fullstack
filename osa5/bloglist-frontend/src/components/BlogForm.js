@@ -27,17 +27,17 @@ const BlogForm = ({ addBlog, showNotification }) => {
       <form onSubmit={handleCreateBlog}>
         <div>
           Title:
-          <input type='text' name='title' value={blogTitle}
+          <input type='text' name='title' value={blogTitle} id='blogform-title'
             onChange={({ target }) => setBlogTitle(target.value)} />
         </div>
         <div>
           Author:
-          <input type='text' name='author' value={blogAuthor}
+          <input type='text' name='author' value={blogAuthor} id='blogform-author'
             onChange={({ target }) => setBlogAuthor(target.value)} />
         </div>
         <div>
           Url:
-          <input type='text' name='url' value={blogUrl}
+          <input type='text' name='url' value={blogUrl} id='blogform-url'
             onChange={({ target }) => setBlogUrl(target.value)} />
         </div>
         <button type='submit'>create</button>
