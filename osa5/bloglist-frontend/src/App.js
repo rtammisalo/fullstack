@@ -44,6 +44,11 @@ const App = () => {
     return (blogService
       .create(user, blogData)
       .then(createdBlog => {
+        createdBlog.user = {
+          id: createdBlog.user,
+          name: user.name,
+          username: user.username
+        }
         setBlogs(blogs.concat(createdBlog))
         blogFormRef.current.toggleVisibility()
         return createdBlog
