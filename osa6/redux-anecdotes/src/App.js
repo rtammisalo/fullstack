@@ -25,7 +25,7 @@ const App = () => {
   return (
     <div>
       <h2>Anecdotes</h2>
-      {anecdotes.map(anecdote =>
+      {anecdotes.sort((a, b) => b.votes - a.votes).map(anecdote =>
         <div key={anecdote.id}>
           <div>
             {anecdote.content}
@@ -38,7 +38,7 @@ const App = () => {
       )}
       <h2>create new</h2>
       <form onSubmit={create}>
-        <div><input name='anecdote'/></div>
+        <div><input name='anecdote' /></div>
         <button type='submit'>create</button>
       </form>
     </div>
