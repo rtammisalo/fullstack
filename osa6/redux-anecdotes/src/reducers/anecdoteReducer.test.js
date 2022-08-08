@@ -38,4 +38,23 @@ describe('anecdoteReducer', () => {
             votes: 1
         })
     })
+
+    test('adds a new anecdote with action NEW', () => {
+        const state = initialState
+        const anecdote = 'Premature optimization is the root of all evil.'
+        const action = {
+            type: 'NEW',
+            data: {
+                anecdote: anecdote
+            }
+        }
+
+        deepFreeze(state)
+        expect(state).toHaveLength(3)
+
+        const newState = anecdoteReducer(state, action)
+
+        expect(newState).toHaveLength(4)
+        expect((newState.find(s => s.content === anecdote)).content).toBe(anecdote)
+    })
 })
