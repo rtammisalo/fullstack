@@ -71,9 +71,9 @@ const Notification = (props) => (
 
 
 const CreateNew = (props) => {
-  const content = useField('text')
-  const author = useField('text')
-  const info = useField('text')
+  const [content, contentReset] = useField('text')
+  const [author, authorReset] = useField('text')
+  const [info, infoReset] = useField('text')
   const navigate = useNavigate()
 
   const handleSubmit = (e) => {
@@ -85,6 +85,12 @@ const CreateNew = (props) => {
       votes: 0
     })
     navigate('/')
+  }
+
+  const reset = () => {
+    contentReset()
+    authorReset()
+    infoReset()
   }
 
   return (
@@ -103,7 +109,8 @@ const CreateNew = (props) => {
           url for more info
           <input name='info' {...info} />
         </div>
-        <button>create</button>
+        <button type='submit'>create</button>
+        <button type='button' onClick={reset}>reset</button>
       </form>
     </div>
   )
