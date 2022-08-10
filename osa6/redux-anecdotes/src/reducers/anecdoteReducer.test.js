@@ -20,13 +20,11 @@ const initialState = [
 ]
 
 describe('anecdoteReducer', () => {
-  test('adds to votes with action VOTE', () => {
+  test('adds to votes with action voteAnecdote', () => {
     const state = initialState
     const action = {
-      type: 'VOTE',
-      data: {
-        id: 2
-      }
+      type: 'anecdotes/voteAnecdote',
+      payload: 2
     }
 
     deepFreeze(state)
@@ -39,13 +37,15 @@ describe('anecdoteReducer', () => {
     })
   })
 
-  test('adds a new anecdote with action NEW', () => {
+  test('adds a new anecdote with action addAnecdote', () => {
     const state = initialState
     const anecdote = 'Premature optimization is the root of all evil.'
     const action = {
-      type: 'NEW',
-      data: {
-        anecdote: anecdote
+      type: 'anecdotes/addAnecdote',
+      payload: {
+        content: anecdote,
+        id: 4,
+        votes: 0
       }
     }
 
@@ -56,5 +56,26 @@ describe('anecdoteReducer', () => {
 
     expect(newState).toHaveLength(4)
     expect((newState.find(s => s.content === anecdote)).content).toBe(anecdote)
+  })
+
+  test('sets anecdotes with action setAnecdotes', () => {
+    const state = initialState
+    const action = {
+      type: 'anecdotes/setAnecdotes',
+      payload: [
+        {
+          content: 'The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
+          id: 3,
+          votes: 0
+        }
+      ]
+    }
+
+    deepFreeze(state)
+
+    const newState = anecdoteReducer(state, action)
+
+    expect(newState).toHaveLength(1)
+    expect(newState[0].id).toBe(3)
   })
 })
