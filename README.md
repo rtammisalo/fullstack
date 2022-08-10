@@ -6,3 +6,4 @@
 - [Osa 3 tehtävät](https://github.com/rtammisalo/fullstack-osa3)
 - [Osa 4 tehtävät](/osa4/blogilista)
 - [Osa 5 tehtävät](/osa5/bloglist-frontend)
+- [Osa 6 tehtävät](/osa6)
