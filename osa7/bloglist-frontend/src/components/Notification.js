@@ -14,14 +14,17 @@ const Notification = ({ message }) => {
   const errorStyle = { ...notificationStyle, color: 'red' }
 
   return (
-    <div className="error" style={message.error ? errorStyle : notificationStyle} >
+    <div
+      className='error'
+      style={message.error ? errorStyle : notificationStyle}
+    >
       {message.text}
     </div>
   )
 }
 
 Notification.propTypes = {
-  message: PropTypes.object.isRequired
+  message: PropTypes.object.isRequired,
 }
 
 export default Notification

@@ -27,17 +27,27 @@ const LoginForm = ({ setUser, showNotification }) => {
       <form onSubmit={handleLogin}>
         <div>
           Username:
-          <input type='text' value={username} name='Username' id='login-username'
+          <input
+            type='text'
+            value={username}
+            name='Username'
+            id='login-username'
             onChange={({ target }) => setUsername(target.value)}
           />
         </div>
         <div>
           Password:
-          <input type='password' value={password} name='Password' id='login-password'
+          <input
+            type='password'
+            value={password}
+            name='Password'
+            id='login-password'
             onChange={({ target }) => setPassword(target.value)}
           />
         </div>
-        <button type='submit' id='login-button'>login</button>
+        <button type='submit' id='login-button'>
+          login
+        </button>
       </form>
     </div>
   )
@@ -45,7 +55,7 @@ const LoginForm = ({ setUser, showNotification }) => {
 
 LoginForm.propTypes = {
   setUser: PropTypes.func.isRequired,
-  showNotification: PropTypes.func.isRequired
+  showNotification: PropTypes.func.isRequired,
 }
 
 export default LoginForm

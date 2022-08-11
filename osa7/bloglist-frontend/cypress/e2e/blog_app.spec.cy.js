@@ -1,28 +1,32 @@
 const userKekkonen = {
   username: 'ukekkonen',
   password: 'salsasana',
-  name: 'Urho Kekkonen'
+  name: 'Urho Kekkonen',
 }
 
 const userKakkonen = {
   username: 'pkakkonen',
   password: 'chips',
-  name: 'Pekka Kakkonen'
+  name: 'Pekka Kakkonen',
 }
 
-const blogs = [{
-  title: 'Canonical string reduction',
-  author: 'Edsger W. Dijkstra',
-  url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html'
-}, {
-  title: 'React patterns',
-  author: 'Michael Chan',
-  url: 'https://reactpatterns.com/'
-}, {
-  title: 'Go To Statement Considered Harmful',
-  author: 'Edsger W. Dijkstra',
-  url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html'
-}]
+const blogs = [
+  {
+    title: 'Canonical string reduction',
+    author: 'Edsger W. Dijkstra',
+    url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
+  },
+  {
+    title: 'React patterns',
+    author: 'Michael Chan',
+    url: 'https://reactpatterns.com/',
+  },
+  {
+    title: 'Go To Statement Considered Harmful',
+    author: 'Edsger W. Dijkstra',
+    url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
+  },
+]
 
 describe('Blog app', function () {
   beforeEach(function () {
@@ -68,11 +72,16 @@ describe('Blog app', function () {
     })
 
     it('A blog can be created', function () {
-      cy.get('#blogs-list').should('not.contain', 'Canonical string reduction Edsger W. Dijkstra')
+      cy.get('#blogs-list').should(
+        'not.contain',
+        'Canonical string reduction Edsger W. Dijkstra'
+      )
       cy.contains('new blog').click()
       cy.get('#blogform-title').type('First class tests')
       cy.get('#blogform-author').type('Robert C. Martin')
-      cy.get('#blogform-url').type('http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.html')
+      cy.get('#blogform-url').type(
+        'http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.html'
+      )
       cy.get('#blogform-button').click()
 
       cy.contains('a new blog First class tests by Robert C. Martin added')
@@ -93,10 +102,13 @@ describe('Blog app', function () {
       cy.get('@blogElement').contains('view').click()
       cy.get('@blogElement').contains('remove').click()
       cy.contains(`Removed blog ${blogs[0].title} by ${blogs[0].author}`)
-      cy.get('html').should('not.contain', `${blogs[0].title} ${blogs[0].author}`)
+      cy.get('html').should(
+        'not.contain',
+        `${blogs[0].title} ${blogs[0].author}`
+      )
     })
 
-    it('Another user\'s blog cannot be removed', function () {
+    it("Another user's blog cannot be removed", function () {
       cy.login(userKakkonen)
       cy.contains(`${blogs[0].title} ${blogs[0].author}`).as('blogElement')
       cy.get('@blogElement').contains('view').click()
@@ -104,12 +116,18 @@ describe('Blog app', function () {
     })
 
     it('Blogs are shown in order of likes', function () {
-      cy.contains(`${blogs[0].title} ${blogs[0].author}`).as('blog1')
-        .contains('view').click()
-      cy.contains(`${blogs[1].title} ${blogs[1].author}`).as('blog2')
-        .contains('view').click()
-      cy.contains(`${blogs[2].title} ${blogs[2].author}`).as('blog3')
-        .contains('view').click()
+      cy.contains(`${blogs[0].title} ${blogs[0].author}`)
+        .as('blog1')
+        .contains('view')
+        .click()
+      cy.contains(`${blogs[1].title} ${blogs[1].author}`)
+        .as('blog2')
+        .contains('view')
+        .click()
+      cy.contains(`${blogs[2].title} ${blogs[2].author}`)
+        .as('blog3')
+        .contains('view')
+        .click()
 
       cy.likeBlog('blog2', 0)
       cy.likeBlog('blog2', 1)

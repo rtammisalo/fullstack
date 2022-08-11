@@ -7,7 +7,7 @@ const Blogs = ({ user, blogs, setBlogs, showNotification }) => {
   const likeBlog = (blog) => {
     blogService
       .update(user, { ...blog, likes: blog.likes + 1 })
-      .then(updatedBlog => {
+      .then((updatedBlog) => {
         blog.likes = updatedBlog.likes
         setBlogs([...blogs])
         showNotification(`Liked blog ${blog.title} by ${blog.author}`)
@@ -16,20 +16,26 @@ const Blogs = ({ user, blogs, setBlogs, showNotification }) => {
 
   const removeBlog = (blog) => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
-      blogService
-        .remove(user, blog)
-        .then(() => {
-          setBlogs(blogs.filter(b => b.id !== blog.id))
-          showNotification(`Removed blog ${blog.title} by ${blog.author}`)
-        })
+      blogService.remove(user, blog).then(() => {
+        setBlogs(blogs.filter((b) => b.id !== blog.id))
+        showNotification(`Removed blog ${blog.title} by ${blog.author}`)
+      })
     }
   }
 
   return (
     <div id='blogs-list'>
-      {blogs.sort((a, b) => b.likes - a.likes).map(blog =>
-        <Blog key={blog.id} blog={blog} likeBlog={likeBlog} removeBlog={removeBlog} user={user} />
-      )}
+      {blogs
+        .sort((a, b) => b.likes - a.likes)
+        .map((blog) => (
+          <Blog
+            key={blog.id}
+            blog={blog}
+            likeBlog={likeBlog}
+            removeBlog={removeBlog}
+            user={user}
+          />
+        ))}
     </div>
   )
 }
@@ -38,7 +44,7 @@ Blogs.propTypes = {
   user: PropTypes.object.isRequired,
   blogs: PropTypes.array.isRequired,
   setBlogs: PropTypes.func.isRequired,
-  showNotification: PropTypes.func.isRequired
+  showNotification: PropTypes.func.isRequired,
 }
 
 export default Blogs

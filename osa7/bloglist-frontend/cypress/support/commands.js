@@ -25,29 +25,28 @@
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
 Cypress.Commands.add('login', ({ username, password }) => {
-  cy
-    .request('POST', 'http://localhost:3003/api/login',
-      { username, password })
-    .then(({ body }) => {
-      localStorage.setItem('loggedUser', JSON.stringify(body))
-      cy.visit('http://localhost:3000')
-    })
+  cy.request('POST', 'http://localhost:3003/api/login', {
+    username,
+    password,
+  }).then(({ body }) => {
+    localStorage.setItem('loggedUser', JSON.stringify(body))
+    cy.visit('http://localhost:3000')
+  })
 })
 
 Cypress.Commands.add('addBlog', (blog, user) => {
-  cy
-    .request('POST', 'http://localhost:3003/api/login', user)
-    .then(({ body }) => {
-      cy
-        .request({
-          url: '/api/blogs',
-          method: 'POST',
-          body: { ...blog },
-          headers: {
-            'Authorization': `bearer ${body.token}`
-          }
-        })
-    })
+  cy.request('POST', 'http://localhost:3003/api/login', user).then(
+    ({ body }) => {
+      cy.request({
+        url: '/api/blogs',
+        method: 'POST',
+        body: { ...blog },
+        headers: {
+          Authorization: `bearer ${body.token}`,
+        },
+      })
+    }
+  )
 })
 
 Cypress.Commands.add('likeBlog', (blogAlias, previousLikes) => {

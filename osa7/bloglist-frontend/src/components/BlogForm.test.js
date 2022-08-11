@@ -11,11 +11,12 @@ test('addBlog is called with the right argument', async () => {
   mockAdd.mockResolvedValue({
     title: 'React patterns',
     author: 'Michael Chan',
-    url: 'https://reactpatterns.com/'
+    url: 'https://reactpatterns.com/',
   })
 
-  const { container } =
-    render(<BlogForm addBlog={mockAdd} showNotification={mockNotify} />)
+  const { container } = render(
+    <BlogForm addBlog={mockAdd} showNotification={mockNotify} />
+  )
 
   const titleInput = container.querySelector('#blogform-title')
   const authorInput = container.querySelector('#blogform-author')
@@ -30,10 +31,9 @@ test('addBlog is called with the right argument', async () => {
   await event.click(createButton)
 
   expect(mockAdd.mock.calls).toHaveLength(1)
-  expect(mockAdd.mock.calls[0][0])
-    .toStrictEqual({
-      blogTitle: 'React patterns',
-      blogAuthor: 'Michael Chan',
-      blogUrl: 'https://reactpatterns.com/'
-    })
+  expect(mockAdd.mock.calls[0][0]).toStrictEqual({
+    blogTitle: 'React patterns',
+    blogAuthor: 'Michael Chan',
+    blogUrl: 'https://reactpatterns.com/',
+  })
 })

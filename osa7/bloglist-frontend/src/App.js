@@ -23,7 +23,7 @@ const App = () => {
 
   useEffect(() => {
     if (user) {
-      blogService.getAll().then(blogs => setBlogs(blogs))
+      blogService.getAll().then((blogs) => setBlogs(blogs))
     } else {
       setBlogs([])
     }
@@ -38,40 +38,42 @@ const App = () => {
     const blogData = {
       title: blog.blogTitle,
       author: blog.blogAuthor,
-      url: blog.blogUrl
+      url: blog.blogUrl,
     }
 
-    return (blogService
-      .create(user, blogData)
-      .then(createdBlog => {
-        createdBlog.user = {
-          id: createdBlog.user,
-          name: user.name,
-          username: user.username
-        }
-        setBlogs(blogs.concat(createdBlog))
-        blogFormRef.current.toggleVisibility()
-        return createdBlog
-      }))
+    return blogService.create(user, blogData).then((createdBlog) => {
+      createdBlog.user = {
+        id: createdBlog.user,
+        name: user.name,
+        username: user.username,
+      }
+      setBlogs(blogs.concat(createdBlog))
+      blogFormRef.current.toggleVisibility()
+      return createdBlog
+    })
   }
 
   return (
     <div>
       <h1>blogs</h1>
       {userNotification && <Notification message={userNotification} />}
-      {!user && <LoginForm setUser={setUser} showNotification={showNotification} />}
-      {user &&
+      {!user && (
+        <LoginForm setUser={setUser} showNotification={showNotification} />
+      )}
+      {user && (
         <div>
           <LoginInfo user={user} setUser={setUser} />
           <Togglable showLabel='new blog' hideLabel='cancel' ref={blogFormRef}>
             <BlogForm addBlog={addBlog} showNotification={showNotification} />
           </Togglable>
-          <Blogs blogs={blogs}
+          <Blogs
+            blogs={blogs}
             setBlogs={setBlogs}
             user={user}
-            showNotification={showNotification} />
+            showNotification={showNotification}
+          />
         </div>
-      }
+      )}
     </div>
   )
 }

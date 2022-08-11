@@ -9,7 +9,7 @@ const blog = {
   author: 'Edsger W. Dijkstra',
   url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
   likes: 5,
-  user: { username: 'ukekkonen', name: 'Urho Kekkonen' }
+  user: { username: 'ukekkonen', name: 'Urho Kekkonen' },
 }
 
 let user, mockLike, mockRemove
@@ -37,8 +37,9 @@ test('renders additional information after button press', async () => {
   const button = screen.getByText('view')
   await event.click(button)
 
-  screen
-    .getByText('Go To Statement Considered Harmful Edsger W. Dijkstra', { exact: false })
+  screen.getByText('Go To Statement Considered Harmful Edsger W. Dijkstra', {
+    exact: false,
+  })
   screen.getByText(blog.url, { exact: false })
   screen.getByText(`likes ${blog.likes}`, { exact: false })
   screen.getByText(blog.user.name, { exact: false })

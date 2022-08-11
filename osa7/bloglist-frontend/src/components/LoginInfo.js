@@ -17,7 +17,7 @@ const LoginInfo = ({ user, setUser }) => {
 
 LoginInfo.propTypes = {
   user: PropTypes.object.isRequired,
-  setUser: PropTypes.func.isRequired
+  setUser: PropTypes.func.isRequired,
 }
 
 export default LoginInfo

@@ -10,13 +10,15 @@ const BlogForm = ({ addBlog, showNotification }) => {
     event.preventDefault()
 
     addBlog({ blogTitle, blogAuthor, blogUrl })
-      .then(createdBlog => {
-        showNotification(`a new blog ${createdBlog.title} by ${createdBlog.author} added`)
+      .then((createdBlog) => {
+        showNotification(
+          `a new blog ${createdBlog.title} by ${createdBlog.author} added`
+        )
         setBlogAuthor('')
         setBlogTitle('')
         setBlogUrl('')
       })
-      .catch(error => {
+      .catch((error) => {
         showNotification(error.response.data, true)
       })
   }
@@ -27,20 +29,37 @@ const BlogForm = ({ addBlog, showNotification }) => {
       <form onSubmit={handleCreateBlog}>
         <div>
           Title:
-          <input type='text' name='title' value={blogTitle} id='blogform-title'
-            onChange={({ target }) => setBlogTitle(target.value)} />
+          <input
+            type='text'
+            name='title'
+            value={blogTitle}
+            id='blogform-title'
+            onChange={({ target }) => setBlogTitle(target.value)}
+          />
         </div>
         <div>
           Author:
-          <input type='text' name='author' value={blogAuthor} id='blogform-author'
-            onChange={({ target }) => setBlogAuthor(target.value)} />
+          <input
+            type='text'
+            name='author'
+            value={blogAuthor}
+            id='blogform-author'
+            onChange={({ target }) => setBlogAuthor(target.value)}
+          />
         </div>
         <div>
           Url:
-          <input type='text' name='url' value={blogUrl} id='blogform-url'
-            onChange={({ target }) => setBlogUrl(target.value)} />
+          <input
+            type='text'
+            name='url'
+            value={blogUrl}
+            id='blogform-url'
+            onChange={({ target }) => setBlogUrl(target.value)}
+          />
         </div>
-        <button type='submit' id='blogform-button'>create</button>
+        <button type='submit' id='blogform-button'>
+          create
+        </button>
       </form>
     </div>
   )
@@ -48,7 +67,7 @@ const BlogForm = ({ addBlog, showNotification }) => {
 
 BlogForm.propTypes = {
   addBlog: PropTypes.func.isRequired,
-  showNotification: PropTypes.func.isRequired
+  showNotification: PropTypes.func.isRequired,
 }
 
 export default BlogForm
