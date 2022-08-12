@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { createBlog } from '../reducers/blogReducer'
 
-const BlogForm = ({ user, toggleVisibility }) => {
+const BlogForm = ({ toggleVisibility }) => {
   const [blogTitle, setBlogTitle] = useState('')
   const [blogAuthor, setBlogAuthor] = useState('')
   const [blogUrl, setBlogUrl] = useState('')
+  const user = useSelector((state) => state.user)
   const dispatch = useDispatch()
 
   const closeForm = () => {
@@ -65,7 +66,6 @@ const BlogForm = ({ user, toggleVisibility }) => {
 }
 
 BlogForm.propTypes = {
-  user: PropTypes.object,
   toggleVisibility: PropTypes.func.isRequired,
 }
 

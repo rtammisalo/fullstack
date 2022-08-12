@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import Blogs from './components/Blogs'
 import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
@@ -6,29 +6,17 @@ import LoginInfo from './components/LoginInfo'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
 import { useDispatch, useSelector } from 'react-redux'
-import { clearBlogs, getBlogs } from './reducers/blogReducer'
+import { restoreLoggedUser } from './reducers/userReducer'
 
 const App = () => {
-  const [user, setUser] = useState(null)
+  const user = useSelector((state) => state.user)
   const userNotification = useSelector((state) => state.notification)
   const blogFormRef = useRef()
   const dispatch = useDispatch()
 
   useEffect(() => {
-    const userJSON = window.localStorage.getItem('loggedUser')
-
-    if (userJSON) {
-      setUser(JSON.parse(userJSON))
-    }
-  }, [])
-
-  useEffect(() => {
-    if (user) {
-      dispatch(getBlogs())
-    } else {
-      dispatch(clearBlogs())
-    }
-  }, [user, dispatch])
+    dispatch(restoreLoggedUser())
+  }, [dispatch])
 
   const toggleVisibility = () => {
     blogFormRef.current.toggleVisibility()
@@ -38,14 +26,14 @@ const App = () => {
     <div>
       <h1>blogs</h1>
       {userNotification && <Notification />}
-      {!user && <LoginForm setUser={setUser} />}
+      {!user && <LoginForm />}
       {user && (
         <div>
-          <LoginInfo user={user} setUser={setUser} />
+          <LoginInfo />
           <Togglable showLabel='new blog' hideLabel='cancel' ref={blogFormRef}>
-            <BlogForm toggleVisibility={toggleVisibility} user={user} />
+            <BlogForm toggleVisibility={toggleVisibility} />
           </Togglable>
-          <Blogs user={user} />
+          <Blogs />
         </div>
       )}
     </div>

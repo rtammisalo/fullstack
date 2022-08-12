@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
 
-const Blog = ({ blog, likeBlog, removeBlog, user }) => {
+const Blog = ({ blog, likeBlog, removeBlog }) => {
   const [viewButtonLabel, setViewButtonLabel] = useState('view')
+  const user = useSelector((state) => state.user)
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -49,7 +51,6 @@ Blog.propTypes = {
   blog: PropTypes.object.isRequired,
   likeBlog: PropTypes.func.isRequired,
   removeBlog: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired,
 }
 
 export default Blog

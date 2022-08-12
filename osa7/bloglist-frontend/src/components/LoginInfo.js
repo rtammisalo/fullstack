@@ -1,10 +1,13 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
+import { logoutUser } from '../reducers/userReducer'
 
-const LoginInfo = ({ user, setUser }) => {
+const LoginInfo = () => {
+  const user = useSelector((state) => state.user)
+  const dispatch = useDispatch()
+
   const logout = () => {
-    window.localStorage.removeItem('loggedUser')
-    setUser(null)
+    dispatch(logoutUser())
   }
 
   return (
@@ -13,11 +16,6 @@ const LoginInfo = ({ user, setUser }) => {
       <button onClick={logout}>logout</button>
     </div>
   )
-}
-
-LoginInfo.propTypes = {
-  user: PropTypes.object.isRequired,
-  setUser: PropTypes.func.isRequired,
 }
 
 export default LoginInfo
