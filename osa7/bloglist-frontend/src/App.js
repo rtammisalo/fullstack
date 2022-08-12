@@ -1,41 +1,50 @@
-import React, { useEffect, useRef } from 'react'
-import Blogs from './components/Blogs'
+import React, { useEffect, useState } from 'react'
 import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
 import LoginInfo from './components/LoginInfo'
-import BlogForm from './components/BlogForm'
-import Togglable from './components/Togglable'
 import { useDispatch, useSelector } from 'react-redux'
 import { restoreLoggedUser } from './reducers/userReducer'
+import { Routes, Route, Navigate, Link } from 'react-router-dom'
+import BlogView from './components/BlogView'
+import Users from './components/Users'
+import loginService from './services/login'
 
 const App = () => {
-  const user = useSelector((state) => state.user)
-  const userNotification = useSelector((state) => state.notification)
-  const blogFormRef = useRef()
   const dispatch = useDispatch()
+  const user = useSelector((state) => state.user)
+  const [storedUser, setStoredUser] = useState(null)
 
   useEffect(() => {
     dispatch(restoreLoggedUser())
   }, [dispatch])
 
-  const toggleVisibility = () => {
-    blogFormRef.current.toggleVisibility()
-  }
+  useEffect(() => {
+    setStoredUser(loginService.getStoredUser())
+  }, [user])
+
+  const navigateToLogin = () => <Navigate replace to='/login' />
 
   return (
     <div>
       <h1>blogs</h1>
-      {userNotification && <Notification />}
-      {!user && <LoginForm />}
-      {user && (
-        <div>
-          <LoginInfo />
-          <Togglable showLabel='new blog' hideLabel='cancel' ref={blogFormRef}>
-            <BlogForm toggleVisibility={toggleVisibility} />
-          </Togglable>
-          <Blogs />
-        </div>
-      )}
+      <Link to='/users'>users</Link>
+      <Notification />
+      <LoginInfo />
+      <Routes>
+        <Route
+          path='/login'
+          element={!storedUser ? <LoginForm /> : <Navigate replace to='/' />}
+        />
+        <Route
+          path='/users'
+          element={storedUser ? <Users /> : navigateToLogin()}
+        />
+        <Route
+          path='/'
+          element={storedUser ? <BlogView /> : navigateToLogin()}
+        />
+        <Route path='*' element={<Navigate replace to='/' />} />
+      </Routes>
     </div>
   )
 }

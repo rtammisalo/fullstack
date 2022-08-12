@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { loginUser } from '../reducers/userReducer'
 
 const LoginForm = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const user = useSelector((state) => state.user)
   const dispatch = useDispatch()
 
   const handleLogin = async (event) => {
@@ -17,7 +18,7 @@ const LoginForm = () => {
   }
 
   return (
-    <div>
+    <div style={user ? { display: 'none' } : {}}>
       <h2>log in to application</h2>
       <form onSubmit={handleLogin}>
         <div>

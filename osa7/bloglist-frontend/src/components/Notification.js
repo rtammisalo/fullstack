@@ -14,11 +14,12 @@ const Notification = () => {
     marginBottom: 10,
   }
   const errorStyle = { ...notificationStyle, color: 'red' }
+  const style = notification.error ? errorStyle : notificationStyle
 
   return (
     <div
       className='error'
-      style={notification.error ? errorStyle : notificationStyle}
+      style={notification.text ? style : { display: 'none' }}
     >
       {notification.text}
     </div>

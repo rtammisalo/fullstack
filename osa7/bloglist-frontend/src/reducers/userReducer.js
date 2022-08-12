@@ -24,7 +24,7 @@ export const loginUser = (username, password) => {
       const user = await loginService.login({ username, password })
       dispatch(setUser(user))
       dispatch(getBlogs())
-      window.localStorage.setItem('loggedUser', JSON.stringify(user))
+      loginService.setStoredUser(user)
     } catch (exception) {
       dispatch(setNotification(exception.response.data, true))
     }
@@ -33,10 +33,10 @@ export const loginUser = (username, password) => {
 
 export const restoreLoggedUser = () => {
   return async (dispatch) => {
-    const userJSON = window.localStorage.getItem('loggedUser')
+    const user = loginService.getStoredUser()
 
-    if (userJSON) {
-      dispatch(setUser(JSON.parse(userJSON)))
+    if (user) {
+      dispatch(setUser(user))
       dispatch(getBlogs())
     }
   }
