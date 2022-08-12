@@ -10,6 +10,7 @@ import Users from './components/Users'
 import User from './components/User'
 import loginService from './services/login'
 import { getAllUsers } from './reducers/usersReducer'
+import Blog from './components/Blog'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -46,6 +47,10 @@ const App = () => {
         <Route
           path='/users/:id'
           element={storedUser ? <User /> : navigateToLogin()}
+        />
+        <Route
+          path='/blogs/:id'
+          element={storedUser ? <Blog /> : navigateToLogin()}
         />
         <Route
           path='/'
