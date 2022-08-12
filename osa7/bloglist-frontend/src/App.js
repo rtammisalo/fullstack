@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
-import LoginInfo from './components/LoginInfo'
 import { useDispatch, useSelector } from 'react-redux'
 import { restoreLoggedUser } from './reducers/userReducer'
-import { Routes, Route, Navigate, Link } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import BlogView from './components/BlogView'
 import Users from './components/Users'
 import User from './components/User'
 import loginService from './services/login'
 import { getAllUsers } from './reducers/usersReducer'
 import Blog from './components/Blog'
+import NavigationMenu from './components/NavigationMenu'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -32,9 +32,8 @@ const App = () => {
   return (
     <div>
       <h1>blogs</h1>
-      <Link to='/users'>users</Link>
+      <NavigationMenu />
       <Notification />
-      <LoginInfo />
       <Routes>
         <Route
           path='/login'

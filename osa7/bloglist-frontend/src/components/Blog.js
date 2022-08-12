@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import {
@@ -14,13 +14,11 @@ const Blog = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  if (!user) {
-    return null
-  }
-
-  if (!blog) {
-    navigate('/')
-  }
+  useEffect(() => {
+    if (!blog) {
+      navigate('/')
+    }
+  }, [blog, navigate])
 
   const likeBlog = () => {
     dispatch(likeBlogAction(user, blog))
@@ -31,6 +29,10 @@ const Blog = () => {
       dispatch(removeBlogAction(user, blog))
       navigate('/')
     }
+  }
+
+  if (!user || !blog) {
+    return null
   }
 
   return (

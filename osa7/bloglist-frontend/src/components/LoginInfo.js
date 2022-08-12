@@ -22,10 +22,10 @@ const LoginInfo = () => {
   }
 
   return (
-    <div>
+    <>
       {user.name} logged in
       <button onClick={logout}>logout</button>
-    </div>
+    </>
   )
 }
 
