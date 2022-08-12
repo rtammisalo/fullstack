@@ -8,10 +8,25 @@ const usersSlice = createSlice({
     setUsers(state, action) {
       return action.payload
     },
+    addBlogToUser(state, action) {
+      const blog = action.payload.createdBlog
+      const user = action.payload.user
+      const listedUser = state.find((u) => u.username === user.username)
+
+      listedUser.blogs.push(blog)
+    },
+    removeBlogFromUser(state, action) {
+      const blog = action.payload.blog
+      const user = action.payload.user
+      const listedUser = state.find((u) => u.username === user.username)
+
+      listedUser.blogs = listedUser.blogs.filter((b) => b.id !== blog.id)
+    },
   },
 })
 
-export const { setUsers } = usersSlice.actions
+export const { setUsers, addBlogToUser, removeBlogFromUser } =
+  usersSlice.actions
 
 export const getAllUsers = () => {
   return async (dispatch) => {

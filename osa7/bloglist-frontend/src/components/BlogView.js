@@ -13,7 +13,7 @@ const BlogView = () => {
   }
 
   if (!user) {
-    return <></>
+    return null
   }
 
   return (
