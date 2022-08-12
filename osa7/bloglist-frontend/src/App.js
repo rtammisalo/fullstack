@@ -1,18 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react'
-import blogService from './services/blogs'
 import Blogs from './components/Blogs'
 import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
 import LoginInfo from './components/LoginInfo'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { clearBlogs, getBlogs } from './reducers/blogReducer'
 
 const App = () => {
   const [user, setUser] = useState(null)
   const userNotification = useSelector((state) => state.notification)
-  const [blogs, setBlogs] = useState([])
   const blogFormRef = useRef()
+  const dispatch = useDispatch()
 
   useEffect(() => {
     const userJSON = window.localStorage.getItem('loggedUser')
@@ -24,29 +24,14 @@ const App = () => {
 
   useEffect(() => {
     if (user) {
-      blogService.getAll().then((blogs) => setBlogs(blogs))
+      dispatch(getBlogs())
     } else {
-      setBlogs([])
+      dispatch(clearBlogs())
     }
-  }, [user])
+  }, [user, dispatch])
 
-  const addBlog = (blog) => {
-    const blogData = {
-      title: blog.blogTitle,
-      author: blog.blogAuthor,
-      url: blog.blogUrl,
-    }
-
-    return blogService.create(user, blogData).then((createdBlog) => {
-      createdBlog.user = {
-        id: createdBlog.user,
-        name: user.name,
-        username: user.username,
-      }
-      setBlogs(blogs.concat(createdBlog))
-      blogFormRef.current.toggleVisibility()
-      return createdBlog
-    })
+  const toggleVisibility = () => {
+    blogFormRef.current.toggleVisibility()
   }
 
   return (
@@ -58,9 +43,9 @@ const App = () => {
         <div>
           <LoginInfo user={user} setUser={setUser} />
           <Togglable showLabel='new blog' hideLabel='cancel' ref={blogFormRef}>
-            <BlogForm addBlog={addBlog} />
+            <BlogForm toggleVisibility={toggleVisibility} user={user} />
           </Togglable>
-          <Blogs blogs={blogs} setBlogs={setBlogs} user={user} />
+          <Blogs user={user} />
         </div>
       )}
     </div>
