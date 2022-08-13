@@ -31,8 +31,10 @@ const tokenExtractor = (request, response, next) => {
 }
 
 const userExtractor = async (request, response, next) => {
-  if (request.method.toUpperCase() !== 'POST'
-    && request.method.toUpperCase() !== 'DELETE') {
+  if (
+    request.method.toUpperCase() !== 'POST' &&
+    request.method.toUpperCase() !== 'DELETE'
+  ) {
     return next()
   }
 

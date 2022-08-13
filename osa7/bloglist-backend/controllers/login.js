@@ -7,13 +7,13 @@ loginRouter.post('/', async (request, response) => {
   const { username, password } = request.body
   const user = await UserModel.findOne({ username })
 
-  if (!user || !await bcrypt.compare(password, user.passwordHash)) {
+  if (!user || !(await bcrypt.compare(password, user.passwordHash))) {
     return response.status(401).json('invalid username or password')
   }
 
   const tokenData = {
     username: user.username,
-    id: user._id
+    id: user._id,
   }
   const token = jwt.sign(tokenData, process.env.SECRET)
 

@@ -2,8 +2,10 @@ const blogsRouter = require('express').Router()
 const BlogModel = require('../models/blog')
 
 blogsRouter.get('/', async (request, response) => {
-  const blogs = await BlogModel
-    .find({}).populate('user', { username: 1, name: 1 })
+  const blogs = await BlogModel.find({}).populate('user', {
+    username: 1,
+    name: 1,
+  })
   response.json(blogs)
 })
 
@@ -38,9 +40,11 @@ blogsRouter.delete('/:id', async (request, response) => {
 
 blogsRouter.put('/:id', async (request, response) => {
   const blog = { ...request.body }
-  const updatedBlog = await BlogModel
-    .findByIdAndUpdate(request.params.id, blog, { new: true })
-    .populate('user', { username: 1, name: 1 })
+  const updatedBlog = await BlogModel.findByIdAndUpdate(
+    request.params.id,
+    blog,
+    { new: true }
+  ).populate('user', { username: 1, name: 1 })
 
   if (!updatedBlog) {
     return response.status(404).end()

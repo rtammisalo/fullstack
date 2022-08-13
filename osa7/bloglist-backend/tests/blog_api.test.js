@@ -30,10 +30,13 @@ const createToken = async (user) => {
     user = (await UserModel.find({}))[0]
   }
 
-  const token = jwt.sign({
-    username: user.username,
-    id: user._id
-  }, process.env.SECRET)
+  const token = jwt.sign(
+    {
+      username: user.username,
+      id: user._id,
+    },
+    process.env.SECRET
+  )
 
   return token
 }
@@ -65,8 +68,7 @@ describe('when there are blogs in the database', () => {
   test('returned blogs contain a blog in the database', async () => {
     const response = await api.get('/api/blogs')
 
-    expect(response.body.map(blog => blog.title))
-      .toContain('Type wars')
+    expect(response.body.map((blog) => blog.title)).toContain('Type wars')
   })
 
   test('returned blogs have an id field', async () => {
@@ -79,7 +81,7 @@ describe('when there are blogs in the database', () => {
     test('new blog gets added to the database', async () => {
       const blogs = await addNewBlog(helpers.unaddedBlog)
 
-      expect(blogs.map(blog => blog.title)).toContain('Are ghosts real?')
+      expect(blogs.map((blog) => blog.title)).toContain('Are ghosts real?')
     })
 
     test('adds only one blog to the database', async () => {
@@ -103,7 +105,9 @@ describe('when there are blogs in the database', () => {
       delete blog.likes
       const blogs = await addNewBlog(blog)
 
-      expect(blogs.find(blog => blog.title === 'Are ghosts real?').likes).toBe(0)
+      expect(
+        blogs.find((blog) => blog.title === 'Are ghosts real?').likes
+      ).toBe(0)
     })
 
     test('without a token does not add the blog', async () => {
@@ -117,7 +121,7 @@ describe('when there are blogs in the database', () => {
 
       const blogs = await helpers.blogsInDb()
 
-      expect(blogs.map(b => b.title)).not.toContain('Are ghosts real?')
+      expect(blogs.map((b) => b.title)).not.toContain('Are ghosts real?')
     })
   })
 
@@ -132,7 +136,7 @@ describe('when there are blogs in the database', () => {
         .expect(204)
       const blogs = await helpers.blogsInDb()
 
-      expect(blogs.map(blog => blog.title)).not.toContain('React patterns')
+      expect(blogs.map((blog) => blog.title)).not.toContain('React patterns')
     })
 
     test('with a malformatted id returns code 400', async () => {
@@ -157,12 +161,10 @@ describe('when there are blogs in the database', () => {
     test('without a token does not delete the blog', async () => {
       const selectedBlog = await BlogModel.findOne({ title: 'React patterns' })
 
-      await api
-        .delete(`/api/blogs/${selectedBlog.id}`)
-        .expect(401)
+      await api.delete(`/api/blogs/${selectedBlog.id}`).expect(401)
       const blogs = await helpers.blogsInDb()
 
-      expect(blogs.map(blog => blog.title)).toContain('React patterns')
+      expect(blogs.map((blog) => blog.title)).toContain('React patterns')
     })
   })
 
@@ -182,9 +184,7 @@ describe('when there are blogs in the database', () => {
     })
 
     test('with a malformatted id returns code 400', async () => {
-      await api
-        .put('/api/blogs/1')
-        .expect(400)
+      await api.put('/api/blogs/1').expect(400)
     })
 
     test('with a nonexistant id returns code 404', async () => {
