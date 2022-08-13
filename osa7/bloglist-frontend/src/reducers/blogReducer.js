@@ -3,9 +3,12 @@ import blogService from '../services/blogs'
 import { setNotification } from './notificationReducer'
 import { addBlogToUser, removeBlogFromUser } from './usersReducer'
 
+const initialState = []
+initialState.uninitialized = true
+
 const blogSlice = createSlice({
   name: 'blogs',
-  initialState: [],
+  initialState: initialState,
   reducers: {
     addBlog(state, action) {
       state.push(action.payload)

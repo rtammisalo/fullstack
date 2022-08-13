@@ -41,3 +41,12 @@ Authorization: bearer
     "url": "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
     "likes": 23
 }
+
+###
+POST http://localhost:3003/api/blogs/62f7567b65bcb4b8b5f8c56a/comments
+Content-Type: application/json
+Authorization: bearer
+
+{
+    "comment": "Hei siellä!"
+}

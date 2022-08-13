@@ -1,24 +1,31 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import {
   removeBlog as removeBlogAction,
   likeBlog as likeBlogAction,
 } from '../reducers/blogReducer'
+import Comments from './Comments'
 
 const Blog = () => {
   const blogId = useParams().id
   const user = useSelector((state) => state.user)
   const blogs = useSelector((state) => state.blogs)
-  const blog = blogs.find((b) => b.id === blogId)
+  const [blog, setBlog] = useState(null)
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (!blog) {
-      navigate('/')
+    if (!blogs.uninitialized) {
+      let foundBlog = blogs.find((b) => b.id === blogId)
+
+      if (!foundBlog) {
+        navigate('/')
+      }
+
+      setBlog(foundBlog)
     }
-  }, [blog, navigate])
+  }, [blogs, navigate, blogId])
 
   const likeBlog = () => {
     dispatch(likeBlogAction(user, blog))
@@ -52,6 +59,8 @@ const Blog = () => {
           remove
         </button>
       )}
+      <br />
+      <Comments comments={blog.comments} />
     </div>
   )
 }
