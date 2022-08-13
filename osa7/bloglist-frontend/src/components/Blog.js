@@ -60,7 +60,7 @@ const Blog = () => {
         </button>
       )}
       <br />
-      <Comments comments={blog.comments} />
+      <Comments blog={blog} />
     </div>
   )
 }

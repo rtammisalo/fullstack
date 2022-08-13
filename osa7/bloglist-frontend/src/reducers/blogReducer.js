@@ -104,4 +104,20 @@ export const likeBlog = (user, blog) => {
   }
 }
 
+export const addComment = (user, blog, comment) => {
+  return async (dispatch) => {
+    try {
+      const updatedBlog = await blogService.update(user, {
+        ...blog,
+        comments: [...blog.comments, comment],
+      })
+
+      dispatch(updateBlog(updatedBlog))
+      dispatch(setNotification(`Added comment ${comment}`))
+    } catch (error) {
+      dispatch(setNotification(`Failed to add comment ${comment}`, true))
+    }
+  }
+}
+
 export default blogSlice.reducer
