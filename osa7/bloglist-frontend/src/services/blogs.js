@@ -26,7 +26,11 @@ const update = (user, blog) => {
   const config = getTokenConfig(user)
 
   return axios
-    .put(`${baseUrl}/${blog.id}`, { ...blog, user: blog.user.id }, config)
+    .put(
+      `${baseUrl}/${blog.id}`,
+      { ...blog, user: blog.user.id, comments: blog.comments.map((c) => c.id) },
+      config
+    )
     .then((response) => response.data)
 }
 
