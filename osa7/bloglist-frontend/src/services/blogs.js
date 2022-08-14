@@ -36,4 +36,13 @@ const remove = (user, blog) => {
   return axios.delete(`${baseUrl}/${blog.id}`, config)
 }
 
-export default { getAll, create, update, remove }
+const addComment = (user, blog, comment) => {
+  const config = getTokenConfig(user)
+  const commentObj = { content: comment }
+
+  return axios
+    .post(`${baseUrl}/${blog.id}/comments`, commentObj, config)
+    .then((response) => response.data)
+}
+
+export default { getAll, create, update, remove, addComment }

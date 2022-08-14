@@ -107,10 +107,11 @@ export const likeBlog = (user, blog) => {
 export const addComment = (user, blog, comment) => {
   return async (dispatch) => {
     try {
-      const updatedBlog = await blogService.update(user, {
+      const savedComment = await blogService.addComment(user, blog, comment)
+      const updatedBlog = {
         ...blog,
-        comments: [...blog.comments, comment],
-      })
+        comments: [...blog.comments, savedComment],
+      }
 
       dispatch(updateBlog(updatedBlog))
       dispatch(setNotification(`Added comment ${comment}`))

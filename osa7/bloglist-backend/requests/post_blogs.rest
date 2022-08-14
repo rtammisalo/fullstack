@@ -42,11 +42,11 @@ Authorization: bearer
     "likes": 23
 }
 
-###
-POST http://localhost:3003/api/blogs/62f7567b65bcb4b8b5f8c56a/comments
+### Comment
+POST http://localhost:3003/api/blogs/62f0076546e3160947e3c40e/comments
 Content-Type: application/json
 Authorization: bearer
 
 {
-    "comment": "Hei siellä!"
+    "content": "Hei siellä!"
 }

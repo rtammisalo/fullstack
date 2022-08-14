@@ -11,8 +11,8 @@ const Comments = ({ blog }) => {
       <h2>Comments</h2>
       <CommentForm blog={blog} />
       <ul>
-        {Object.entries(blog.comments).map((e) => (
-          <li key={e[0] + e[1]}>{e[1]}</li>
+        {blog.comments.map((comment) => (
+          <li key={comment.id}>{comment.content}</li>
         ))}
       </ul>
     </div>
