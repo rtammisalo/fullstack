@@ -50,6 +50,8 @@ Cypress.Commands.add('addBlog', (blog, user) => {
 })
 
 Cypress.Commands.add('likeBlog', (blogAlias, previousLikes) => {
-  cy.get(`@${blogAlias}`).contains('like').click()
-  cy.get(`@${blogAlias}`).contains(`likes ${previousLikes + 1}`)
+  cy.get(`@${blogAlias}`).click()
+  cy.contains('like').click()
+  cy.contains(`${previousLikes + 1} likes`)
+  cy.visit('http://localhost:3000')
 })

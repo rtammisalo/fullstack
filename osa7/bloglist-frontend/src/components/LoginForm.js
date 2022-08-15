@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { loginUser } from '../reducers/userReducer'
+import { Form, Button, LoginFormDiv } from './styled'
 
 const LoginForm = () => {
   const [username, setUsername] = useState('')
@@ -18,11 +19,11 @@ const LoginForm = () => {
   }
 
   return (
-    <div style={user ? { display: 'none' } : {}}>
+    <LoginFormDiv style={user ? { display: 'none' } : {}}>
       <h2>log in to application</h2>
-      <form onSubmit={handleLogin}>
+      <Form onSubmit={handleLogin}>
+        <div>Username:</div>
         <div>
-          Username:
           <input
             type='text'
             value={username}
@@ -31,8 +32,8 @@ const LoginForm = () => {
             onChange={({ target }) => setUsername(target.value)}
           />
         </div>
+        <div>Password:</div>
         <div>
-          Password:
           <input
             type='password'
             value={password}
@@ -41,11 +42,11 @@ const LoginForm = () => {
             onChange={({ target }) => setPassword(target.value)}
           />
         </div>
-        <button type='submit' id='login-button'>
+        <Button type='submit' id='login-button'>
           login
-        </button>
-      </form>
-    </div>
+        </Button>
+      </Form>
+    </LoginFormDiv>
   )
 }
 

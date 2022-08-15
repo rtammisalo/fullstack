@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 import { createBlog } from '../reducers/blogReducer'
+import { Form, Button, BlogFormDiv } from './styled'
 
 const BlogForm = ({ toggleVisibility }) => {
   const [blogTitle, setBlogTitle] = useState('')
@@ -24,11 +25,11 @@ const BlogForm = ({ toggleVisibility }) => {
   }
 
   return (
-    <div>
+    <BlogFormDiv>
       <h2>create new</h2>
-      <form onSubmit={handleCreateBlog}>
+      <Form onSubmit={handleCreateBlog}>
+        <div>Title:</div>
         <div>
-          Title:
           <input
             type='text'
             name='title'
@@ -37,8 +38,8 @@ const BlogForm = ({ toggleVisibility }) => {
             onChange={({ target }) => setBlogTitle(target.value)}
           />
         </div>
+        <div>Author:</div>
         <div>
-          Author:
           <input
             type='text'
             name='author'
@@ -47,8 +48,8 @@ const BlogForm = ({ toggleVisibility }) => {
             onChange={({ target }) => setBlogAuthor(target.value)}
           />
         </div>
+        <div>Url:</div>
         <div>
-          Url:
           <input
             type='text'
             name='url'
@@ -57,11 +58,11 @@ const BlogForm = ({ toggleVisibility }) => {
             onChange={({ target }) => setBlogUrl(target.value)}
           />
         </div>
-        <button type='submit' id='blogform-button'>
+        <Button id='blogform-button'>
           create
-        </button>
-      </form>
-    </div>
+        </Button>
+      </Form>
+    </BlogFormDiv>
   )
 }
 

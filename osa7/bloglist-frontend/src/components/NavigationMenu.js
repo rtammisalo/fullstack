@@ -1,32 +1,27 @@
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import LoginInfo from './LoginInfo'
+import { Navigation } from './styled'
 
 const NavigationMenu = () => {
   const user = useSelector((state) => state.user)
-  const style = {
-    backgroundColor: 'lightgray',
-    margin: 5,
-    padding: 5,
-  }
-  const padding = {
-    padding: 5,
-  }
 
   if (!user) {
     return null
   }
 
   return (
-    <div style={style}>
-      <Link to='/blogs' style={padding}>
-        blogs
-      </Link>
-      <Link to='/users' style={padding}>
-        users
-      </Link>
-      <LoginInfo style={padding} />
-    </div>
+    <Navigation>
+      <div className='NavigationTab'>
+        <Link to='/blogs'>blogs</Link>
+      </div>
+      <div className='NavigationTab'>
+        <Link to='/users'>users</Link>
+      </div>
+      <div id='LoginInfo' className='NavigationTab'>
+        <LoginInfo />
+      </div>
+    </Navigation>
   )
 }
 

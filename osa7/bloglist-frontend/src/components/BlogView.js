@@ -17,7 +17,7 @@ const BlogView = () => {
   }
 
   return (
-    <div>
+    <div className='tab-view'>
       <Togglable showLabel='new blog' hideLabel='cancel' ref={blogFormRef}>
         <BlogForm toggleVisibility={toggleVisibility} />
       </Togglable>

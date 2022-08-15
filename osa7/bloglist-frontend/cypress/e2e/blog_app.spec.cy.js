@@ -90,17 +90,17 @@ describe('Blog app', function () {
 
     it('A blog can be liked', function () {
       cy.contains(`${blogs[0].title} ${blogs[0].author}`).as('blogElement')
-      cy.get('@blogElement').contains('view').click()
-      cy.get('@blogElement').contains('likes 0')
-      cy.get('@blogElement').contains('like').click()
+      cy.get('@blogElement').click()
+      cy.get('.tab-view').contains('0 likes')
+      cy.get('.tab-view').contains('like').click()
 
-      cy.get('@blogElement').contains('likes 1')
+      cy.get('.tab-view').contains('1 likes')
     })
 
     it('A blog can be removed', function () {
       cy.contains(`${blogs[0].title} ${blogs[0].author}`).as('blogElement')
-      cy.get('@blogElement').contains('view').click()
-      cy.get('@blogElement').contains('remove').click()
+      cy.get('@blogElement').click()
+      cy.get('.tab-view').contains('remove').click()
       cy.contains(`Removed blog ${blogs[0].title} by ${blogs[0].author}`)
       cy.get('html').should(
         'not.contain',
@@ -108,40 +108,34 @@ describe('Blog app', function () {
       )
     })
 
-    it("Another user's blog cannot be removed", function () {
+    it('Another use\'s blog cannot be removed', function () {
       cy.login(userKakkonen)
       cy.contains(`${blogs[0].title} ${blogs[0].author}`).as('blogElement')
-      cy.get('@blogElement').contains('view').click()
-      cy.get('@blogElement').should('not.contain', 'remove')
+      cy.get('@blogElement').click()
+      cy.get('.tab-view').should('not.contain', 'remove')
     })
 
     it('Blogs are shown in order of likes', function () {
       cy.contains(`${blogs[0].title} ${blogs[0].author}`)
         .as('blog1')
-        .contains('view')
-        .click()
       cy.contains(`${blogs[1].title} ${blogs[1].author}`)
         .as('blog2')
-        .contains('view')
-        .click()
       cy.contains(`${blogs[2].title} ${blogs[2].author}`)
         .as('blog3')
-        .contains('view')
-        .click()
 
       cy.likeBlog('blog2', 0)
       cy.likeBlog('blog2', 1)
       cy.likeBlog('blog3', 0)
 
-      cy.get('.blog').eq(0).should('contain', blogs[1].title)
-      cy.get('.blog').eq(1).should('contain', blogs[2].title)
+      cy.get('.blog-entry').eq(0).should('contain', blogs[1].title)
+      cy.get('.blog-entry').eq(1).should('contain', blogs[2].title)
 
       cy.likeBlog('blog1', 0)
       cy.likeBlog('blog1', 1)
       cy.likeBlog('blog1', 2)
 
-      cy.get('.blog').eq(0).should('contain', blogs[0].title)
-      cy.get('.blog').eq(1).should('contain', blogs[1].title)
+      cy.get('.blog-entry').eq(0).should('contain', blogs[0].title)
+      cy.get('.blog-entry').eq(1).should('contain', blogs[1].title)
     })
   })
 })

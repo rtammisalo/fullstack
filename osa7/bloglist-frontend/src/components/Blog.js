@@ -6,6 +6,7 @@ import {
   likeBlog as likeBlogAction,
 } from '../reducers/blogReducer'
 import Comments from './Comments'
+import { BlogInfoDiv, Button } from './styled'
 
 const Blog = () => {
   const blogId = useParams().id
@@ -43,25 +44,29 @@ const Blog = () => {
   }
 
   return (
-    <div className='blog'>
-      <h2>{blog.title}</h2>
-      <a href={blog.url}>{blog.url}</a>
-      <br />
-      {blog.likes} likes <button onClick={() => likeBlog(blog)}>like</button>
-      <br />
-      added by {blog.user.name}
-      <br />
-      {user.username === blog.user.username && (
-        <button
-          onClick={() => removeBlog(blog)}
-          style={{ backgroundColor: 'lightblue' }}
-        >
-          remove
-        </button>
-      )}
-      <br />
+    <BlogInfoDiv className='tab-view'>
+      <div>
+        <h2>{blog.title}</h2>
+      </div>
+      <div id='blog-likes' className='blog-info'>
+        {blog.likes} likes <Button onClick={() => likeBlog(blog)}>like</Button>
+      </div>
+      <div id='blog-url' className='blog-info'>
+        <a href={blog.url}>{blog.url}</a>
+      </div>
+      <div id='blog-creator' className='blog-info'>
+        added by {blog.user.name}
+        <br />
+        {user.username === blog.user.username && (
+          <Button color={'lightblue'} hoverColor={'#daeef5'}
+            onClick={() => removeBlog(blog)}
+          >
+            remove
+          </Button>
+        )}
+      </div>
       <Comments blog={blog} />
-    </div>
+    </BlogInfoDiv>
   )
 }
 

@@ -27,7 +27,7 @@ const User = () => {
   }
 
   return (
-    <div>
+    <div className='tab-view'>
       <h2>{selectedUser.name}</h2>
       <ul>
         {selectedUser ? (

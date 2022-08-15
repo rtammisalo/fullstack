@@ -2,6 +2,7 @@ import PropType from 'prop-types'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { addComment } from '../reducers/blogReducer'
+import { Form, Button } from './styled'
 
 const CommentForm = ({ blog }) => {
   const [comment, setComment] = useState('')
@@ -16,15 +17,15 @@ const CommentForm = ({ blog }) => {
 
   return (
     <div>
-      <form onSubmit={saveComment}>
+      <Form onSubmit={saveComment}>
         <input
           type='text'
           name='comment'
           value={comment}
           onChange={({ target }) => setComment(target.value)}
         ></input>
-        <button>add comment</button>
-      </form>
+        <Button>add comment</Button>
+      </Form>
     </div>
   )
 }

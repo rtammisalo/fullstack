@@ -60,7 +60,6 @@ export const createBlog = (user, blog, closeForm) => {
       dispatch(addBlog(createdBlog))
       dispatch(addBlogToUser({ createdBlog, user }))
     } catch (error) {
-      console.log(error)
       dispatch(setNotification(error.response.data, true))
     }
   }

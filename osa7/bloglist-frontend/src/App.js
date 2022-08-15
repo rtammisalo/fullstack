@@ -11,6 +11,7 @@ import loginService from './services/login'
 import { getAllUsers } from './reducers/usersReducer'
 import Blog from './components/Blog'
 import NavigationMenu from './components/NavigationMenu'
+import { AppName, Page } from './components/styled'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -30,8 +31,10 @@ const App = () => {
   const navigateToLogin = () => <Navigate replace to='/login' />
 
   return (
-    <div>
-      <h1>blogs</h1>
+    <Page>
+      <AppName>
+        <h1>blogs</h1>
+      </AppName>
       <NavigationMenu />
       <Notification />
       <Routes>
@@ -57,7 +60,7 @@ const App = () => {
         />
         <Route path='*' element={<Navigate replace to='/' />} />
       </Routes>
-    </div>
+    </Page>
   )
 }
 

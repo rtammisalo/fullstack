@@ -4,6 +4,7 @@ import { removeUser } from '../reducers/userReducer'
 import { clearBlogs } from '../reducers/blogReducer'
 import { useNavigate } from 'react-router-dom'
 import loginService from '../services/login'
+import { Button } from './styled'
 
 const LoginInfo = () => {
   const user = useSelector((state) => state.user)
@@ -22,10 +23,14 @@ const LoginInfo = () => {
   }
 
   return (
-    <>
-      {user.name} logged in
-      <button onClick={logout}>logout</button>
-    </>
+    <div style={{ textAlign: 'start' }}>
+      <div style={{ display: 'inline', paddingRight: '5px' }}>
+        {user.name} logged in
+      </div>
+      <div style={{ display: 'inline' }}>
+        <Button onClick={logout}>logout</Button>
+      </div>
+    </div>
   )
 }
 

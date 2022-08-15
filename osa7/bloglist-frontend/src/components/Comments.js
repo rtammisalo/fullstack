@@ -7,7 +7,7 @@ const Comments = ({ blog }) => {
   }
 
   return (
-    <div>
+    <div style={{ paddingBottom: 1 }}>
       <h2>Comments</h2>
       <CommentForm blog={blog} />
       <ul>

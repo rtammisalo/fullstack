@@ -1,13 +1,14 @@
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { Table } from './styled'
 
 const Users = () => {
   const users = useSelector((state) => state.users)
 
   return (
-    <div>
+    <div className='tab-view'>
       <h2>Users</h2>
-      <table>
+      <Table>
         <thead>
           <tr>
             <th></th>
@@ -26,7 +27,7 @@ const Users = () => {
               </tr>
             ))}
         </tbody>
-      </table>
+      </Table>
     </div>
   )
 }
