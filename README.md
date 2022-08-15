@@ -7,3 +7,4 @@
 - [Osa 4 tehtävät](/osa4/blogilista)
 - [Osa 5 tehtävät](/osa5/bloglist-frontend)
 - [Osa 6 tehtävät](/osa6)
+- [Osa 7 tehtävät](/osa7)
