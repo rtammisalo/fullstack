@@ -58,7 +58,9 @@ const Blog = () => {
         added by {blog.user.name}
         <br />
         {user.username === blog.user.username && (
-          <Button color={'lightblue'} hoverColor={'#daeef5'}
+          <Button
+            color={'lightblue'}
+            hoverColor={'#daeef5'}
             onClick={() => removeBlog(blog)}
           >
             remove

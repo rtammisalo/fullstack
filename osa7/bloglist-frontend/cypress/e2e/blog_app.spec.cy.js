@@ -108,7 +108,7 @@ describe('Blog app', function () {
       )
     })
 
-    it('Another use\'s blog cannot be removed', function () {
+    it("Another use's blog cannot be removed", function () {
       cy.login(userKakkonen)
       cy.contains(`${blogs[0].title} ${blogs[0].author}`).as('blogElement')
       cy.get('@blogElement').click()
@@ -116,12 +116,9 @@ describe('Blog app', function () {
     })
 
     it('Blogs are shown in order of likes', function () {
-      cy.contains(`${blogs[0].title} ${blogs[0].author}`)
-        .as('blog1')
-      cy.contains(`${blogs[1].title} ${blogs[1].author}`)
-        .as('blog2')
-      cy.contains(`${blogs[2].title} ${blogs[2].author}`)
-        .as('blog3')
+      cy.contains(`${blogs[0].title} ${blogs[0].author}`).as('blog1')
+      cy.contains(`${blogs[1].title} ${blogs[1].author}`).as('blog2')
+      cy.contains(`${blogs[2].title} ${blogs[2].author}`).as('blog3')
 
       cy.likeBlog('blog2', 0)
       cy.likeBlog('blog2', 1)

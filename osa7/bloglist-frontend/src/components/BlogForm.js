@@ -58,9 +58,7 @@ const BlogForm = ({ toggleVisibility }) => {
             onChange={({ target }) => setBlogUrl(target.value)}
           />
         </div>
-        <Button id='blogform-button'>
-          create
-        </Button>
+        <Button id='blogform-button'>create</Button>
       </Form>
     </BlogFormDiv>
   )
