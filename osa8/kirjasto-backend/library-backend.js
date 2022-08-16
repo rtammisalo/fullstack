@@ -1,4 +1,3 @@
-const { v1: uuid } = require('uuid')
 const { ApolloServer, gql, UserInputError } = require('apollo-server')
 const Author = require('./models/author')
 const Book = require('./models/book')
@@ -141,17 +140,35 @@ const resolvers = {
     bookCount: async () => Book.collection.countDocuments(),
     authorCount: async () => Author.collection.countDocuments(),
     allBooks: async (root, args) => {
-      /* Args.author & genre missing */
-      return Book.find({})
+      const filters = {}
+
+      if (args.author) {
+        const author = await Author.findOne({ name: args.author })
+
+        if (!author) {
+          return []
+        }
+
+        filters.author = author._id
+      }
+
+      if (args.genre) {
+        filters.genres = { $in: [args.genre] }
+      }
+
+      return Book.find(filters)
     },
     allAuthors: async () => Author.find({}),
   },
   Author: {
-    bookCount: ({ name }) => 0, // TODO
+    bookCount: async ({ id }) => {
+      const books = await Book.find({ author: id })
+      return books.length
+    },
   },
   Book: {
-    author: async () => {
-      return { name: 'fake', id: '1212', born: 1920, bookCount: 0 }
+    author: async ({ author }) => {
+      return Author.findById(author)
     },
   },
   Mutation: {
@@ -175,14 +192,21 @@ const resolvers = {
 
       return book
     },
-    editAuthor: (root, args) => {
-      const author = authors.find((a) => a.name === args.name)
+    editAuthor: async (root, args) => {
+      const author = await Author.findOne({ name: args.name })
 
       if (!author) {
         return null
       }
 
-      author.born = args.setBornTo
+      try {
+        author.born = args.setBornTo
+        await author.save()
+      } catch (error) {
+        throw new UserInputError(error.message, {
+          invalidArgs: args,
+        })
+      }
 
       return author
     },
