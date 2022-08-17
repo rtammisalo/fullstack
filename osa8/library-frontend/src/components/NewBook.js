@@ -1,6 +1,30 @@
 import { useMutation } from '@apollo/client'
 import { useState } from 'react'
-import { ADD_NEW_BOOK, ALL_BOOKS, ALL_AUTHORS } from '../queries'
+import {
+  ADD_NEW_BOOK,
+  ALL_AUTHORS,
+  ALL_GENRE_BOOKS,
+  ALL_GENRES,
+} from '../queries'
+
+const updateGenreQuery = (cache, response, bookGenre) => {
+  cache.updateQuery(
+    {
+      query: ALL_GENRE_BOOKS,
+      variables: { genre: bookGenre },
+    },
+    (data) => {
+      if (!data) {
+        // Does not exist in cache yet
+        return
+      }
+
+      return {
+        allBooks: [...data.allBooks, response.data.addBook],
+      }
+    }
+  )
+}
 
 const NewBook = (props) => {
   const [title, setTitle] = useState('')
@@ -10,7 +34,17 @@ const NewBook = (props) => {
   const [genres, setGenres] = useState([])
 
   const [addNewBook] = useMutation(ADD_NEW_BOOK, {
-    refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],
+    update: (cache, response) => {
+      updateGenreQuery(cache, response, '')
+      const bookGenres = new Set(response.data.addBook.genres)
+      for (let bookGenre of bookGenres.values()) {
+        updateGenreQuery(cache, response, bookGenre)
+      }
+    },
+    refetchQueries: [
+      { query: ALL_AUTHORS },
+      { query: ALL_GENRES },
+    ],
   })
 
   if (!props.show) {
