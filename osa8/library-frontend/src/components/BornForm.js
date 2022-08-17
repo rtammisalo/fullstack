@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useMutation } from '@apollo/client'
 import { ALL_AUTHORS, SET_BIRTH_YEAR } from '../queries'
 
@@ -9,12 +9,17 @@ const BornForm = (props) => {
     refetchQueries: [{ query: ALL_AUTHORS }],
   })
 
+  useEffect(() => {
+    if (!name && props.authors.length) {
+      setName(props.authors[0].name)
+    }
+  }, [name, setName, props.authors])
+
   const submit = async (event) => {
     event.preventDefault()
 
     setBirthYear({ variables: { name, born } })
 
-    setName('')
     setBorn('')
   }
 
