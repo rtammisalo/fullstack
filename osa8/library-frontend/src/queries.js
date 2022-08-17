@@ -1,5 +1,14 @@
 import { gql } from '@apollo/client'
 
+const AUTHOR_DETAILS = gql`
+  fragment AuthorDetails on Author {
+    name
+    id
+    born
+    bookCount
+  }
+`
+
 export const ME = gql`
   query {
     me {
@@ -12,12 +21,10 @@ export const ME = gql`
 export const ALL_AUTHORS = gql`
   query {
     allAuthors {
-      name
-      id
-      born
-      bookCount
+      ...AuthorDetails
     }
   }
+  ${AUTHOR_DETAILS}
 `
 
 export const ALL_BOOKS = gql`
@@ -26,15 +33,13 @@ export const ALL_BOOKS = gql`
       title
       published
       author {
-        name
-        id
-        born
-        bookCount
+        ...AuthorDetails
       }
       id
       genres
     }
   }
+  ${AUTHOR_DETAILS}
 `
 
 export const ALL_GENRES = gql`
@@ -51,15 +56,13 @@ export const ALL_GENRE_BOOKS = gql`
       title
       published
       author {
-        name
-        id
-        born
-        bookCount
+        ...AuthorDetails
       }
       id
       genres
     }
   }
+  ${AUTHOR_DETAILS}
 `
 
 export const ADD_NEW_BOOK = gql`
@@ -78,26 +81,22 @@ export const ADD_NEW_BOOK = gql`
       title
       published
       author {
-        name
-        id
-        born
-        bookCount
+        ...AuthorDetails
       }
       id
       genres
     }
   }
+  ${AUTHOR_DETAILS}
 `
 
 export const SET_BIRTH_YEAR = gql`
   mutation setBirthYear($name: String!, $born: Int!) {
     editAuthor(name: $name, setBornTo: $born) {
-      name
-      id
-      born
-      bookCount
+      ...AuthorDetails
     }
   }
+  ${AUTHOR_DETAILS}
 `
 
 export const SERVER_LOGIN = gql`

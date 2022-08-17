@@ -18,7 +18,7 @@ const App = () => {
   }
 
   const logout = () => {
-    setToken(null)
+    updateToken(null)
     localStorage.clear()
     client.resetStore()
   }

@@ -6,7 +6,8 @@ import BooksTable from './BooksTable'
 const Recommend = (props) => {
   const userData = useQuery(ME, { skip: !props.show })
   const [getGenreBooks, result] = useLazyQuery(ALL_GENRE_BOOKS)
-  const favoriteGenre = userData.data ? userData.data.me.favoriteGenre : ''
+  const favoriteGenre =
+    userData.data && userData.data.me ? userData.data.me.favoriteGenre : ''
 
   useEffect(() => {
     if (userData.called && !userData.loading) {
