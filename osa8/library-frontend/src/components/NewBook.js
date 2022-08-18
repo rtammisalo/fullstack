@@ -15,6 +15,13 @@ const NewBook = (props) => {
       updateGenreQueries(cache, response.data.addBook)
     },
     refetchQueries: [{ query: ALL_AUTHORS }, { query: ALL_GENRES }],
+    onError: (error) => {
+      if (error.networkError) {
+        window.alert(error.networkError.result.errors[0].message)
+      } else if (error.graphQLErrors.length) {
+        window.alert(error.graphQLErrors[0].message)
+      }
+    },
   })
 
   if (!props.show) {

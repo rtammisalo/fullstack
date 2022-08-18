@@ -7,6 +7,11 @@ const BornForm = (props) => {
   const [born, setBorn] = useState('')
   const [setBirthYear] = useMutation(SET_BIRTH_YEAR, {
     refetchQueries: [{ query: ALL_AUTHORS }],
+    onError: (error) => {
+      if (error.networkError) {
+        window.alert(error.networkError.result.errors[0].message)
+      }
+    },
   })
 
   useEffect(() => {

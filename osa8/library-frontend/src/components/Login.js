@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react'
 import { useMutation } from '@apollo/client'
 import { SERVER_LOGIN } from '../queries'
+import { isCompositeType } from 'graphql'
 
 const Login = (props) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [login, result] = useMutation(SERVER_LOGIN)
+  const [login, result] = useMutation(SERVER_LOGIN, {
+    onError: (error) => window.alert(error.message),
+  })
 
   useEffect(() => {
     if (result.data) {
