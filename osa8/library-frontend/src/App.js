@@ -5,7 +5,7 @@ import NewBook from './components/NewBook'
 import Login from './components/Login'
 import { useApolloClient, useSubscription } from '@apollo/client'
 import Recommend from './components/Recommend'
-import { BOOK_ADDED, ALL_GENRE_BOOKS } from './queries'
+import { BOOK_ADDED, ALL_GENRE_BOOKS, ALL_AUTHORS } from './queries'
 
 const updateQuery = (cache, query, variables, update) => {
   cache.updateQuery(
@@ -47,6 +47,16 @@ export const updateGenreQueries = (cache, book) => {
   }
 }
 
+const updateAuthorQuery = (cache, author) => {
+  const update = (data) => {
+    return {
+      allAuthors: uniqueById([...data.allAuthors, author]),
+    }
+  }
+
+  updateQuery(cache, ALL_AUTHORS, {}, update)
+}
+
 const App = () => {
   const [page, setPage] = useState('authors')
   const [token, setToken] = useState(null)
@@ -76,6 +86,7 @@ const App = () => {
     onSubscriptionData: ({ subscriptionData, client }) => {
       const addedBook = subscriptionData.data.bookAdded
 
+      updateAuthorQuery(client.cache, addedBook.author)
       updateGenreQueries(client.cache, addedBook)
 
       window.alert(`Added book ${addedBook.title} by ${addedBook.author.name}`)
