@@ -5,7 +5,41 @@ import NewBook from './components/NewBook'
 import Login from './components/Login'
 import { useApolloClient, useSubscription } from '@apollo/client'
 import Recommend from './components/Recommend'
-import { BOOK_ADDED } from './queries'
+import { BOOK_ADDED, ALL_GENRE_BOOKS } from './queries'
+
+export const updateGenreQueries = (cache, book) => {
+  const updateGenreQuery = (bookGenre) => {
+    cache.updateQuery(
+      {
+        query: ALL_GENRE_BOOKS,
+        variables: { genre: bookGenre },
+      },
+      (data) => {
+        if (!data) {
+          // Does not exist in cache yet
+          return
+        }
+
+        const books = [...data.allBooks, book]
+        const uniqueBooks = new Map(
+          books.map((b) => b.id).map((id, i) => [id, books[i]])
+        )
+
+        return {
+          allBooks: [...uniqueBooks.values()],
+        }
+      }
+    )
+  }
+
+  updateGenreQuery('')
+
+  const bookGenres = new Set(book.genres)
+
+  for (let bookGenre of bookGenres.values()) {
+    updateGenreQuery(bookGenre)
+  }
+}
 
 const App = () => {
   const [page, setPage] = useState('authors')
@@ -33,10 +67,12 @@ const App = () => {
   }, [])
 
   useSubscription(BOOK_ADDED, {
-    onSubscriptionData: ({ subscriptionData }) => {
-      const title = subscriptionData.data.bookAdded.title
-      const author = subscriptionData.data.bookAdded.author.name
-      window.alert(`Added book ${title} by ${author}`)
+    onSubscriptionData: ({ subscriptionData, client }) => {
+      const addedBook = subscriptionData.data.bookAdded
+
+      updateGenreQueries(client.cache, addedBook)
+
+      window.alert(`Added book ${addedBook.title} by ${addedBook.author.name}`)
     },
   })
 
