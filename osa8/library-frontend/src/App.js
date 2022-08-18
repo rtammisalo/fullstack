@@ -7,37 +7,43 @@ import { useApolloClient, useSubscription } from '@apollo/client'
 import Recommend from './components/Recommend'
 import { BOOK_ADDED, ALL_GENRE_BOOKS } from './queries'
 
-export const updateGenreQueries = (cache, book) => {
-  const updateGenreQuery = (bookGenre) => {
-    cache.updateQuery(
-      {
-        query: ALL_GENRE_BOOKS,
-        variables: { genre: bookGenre },
-      },
-      (data) => {
-        if (!data) {
-          // Does not exist in cache yet
-          return
-        }
-
-        const books = [...data.allBooks, book]
-        const uniqueBooks = new Map(
-          books.map((b) => b.id).map((id, i) => [id, books[i]])
-        )
-
-        return {
-          allBooks: [...uniqueBooks.values()],
-        }
+const updateQuery = (cache, query, variables, update) => {
+  cache.updateQuery(
+    {
+      query,
+      variables: { ...variables },
+    },
+    (data) => {
+      if (!data) {
+        // Does not exist in cache yet
+        return
       }
-    )
+
+      return update(data)
+    }
+  )
+}
+
+const uniqueById = (items) => {
+  const unique = new Map(
+    items.map((item) => item.id).map((id, i) => [id, items[i]])
+  )
+  return [...unique.values()]
+}
+
+export const updateGenreQueries = (cache, book) => {
+  const update = (data) => {
+    return {
+      allBooks: uniqueById([...data.allBooks, book]),
+    }
   }
 
-  updateGenreQuery('')
+  updateQuery(cache, ALL_GENRE_BOOKS, { genre: '' }, update)
 
   const bookGenres = new Set(book.genres)
 
   for (let bookGenre of bookGenres.values()) {
-    updateGenreQuery(bookGenre)
+    updateQuery(cache, ALL_GENRE_BOOKS, { genre: bookGenre }, update)
   }
 }
 

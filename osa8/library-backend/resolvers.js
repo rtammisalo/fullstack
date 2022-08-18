@@ -37,9 +37,8 @@ const resolvers = {
     },
   },
   Author: {
-    bookCount: async ({ id }) => {
-      const books = await Book.find({ author: id })
-      return books.length
+    bookCount: async (root) => {
+      return root.books.length
     },
   },
   Book: {
@@ -92,6 +91,9 @@ const resolvers = {
 
         book.author = author._id
         await book.save()
+
+        author.books = [...author.books, book._id]
+        await author.save()
       } catch (error) {
         throw new UserInputError(error.message, {
           invalidArgs: args,
