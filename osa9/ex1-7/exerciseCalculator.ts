@@ -16,7 +16,7 @@ interface Rating {
 const calculateRating = (average: number, target: number): Rating => {
   const differencePercent = Math.abs(average - target) / target;
 
-  if (differencePercent < 0.1) {
+  if (differencePercent < 0.3) {
     return { rating: 2, ratingDescription: 'not too bad but could be better' };
   }
 
@@ -42,7 +42,7 @@ const calculateExercises = (
 
   const total = trainingHours.reduce((sum: number, day: number) => {
     if (day < 0 || isNaN(day)) {
-      throw new Error('Training hours should be non-negative');
+      throw new Error('Training hours should be non-negative numbers');
     }
 
     if (day > 0) trainingDays += 1;
@@ -65,9 +65,22 @@ const calculateExercises = (
   };
 };
 
+interface parsedArguments {
+  trainingHours: Array<number>;
+  target: number;
+}
+
+const parseArguments = (args: Array<string>): parsedArguments => {
+  if (args.length < 4) throw new Error('Not enough arguments');
+
+  const target = Number(args[2]);
+  const trainingHours = args.slice(3).map((s) => Number(s));
+
+  return { trainingHours, target };
+};
+
 try {
-  const trainingHours = [3, 0, 2, 4.5, 0, 3, 1];
-  const target = 2;
+  const { trainingHours, target } = parseArguments(process.argv);
 
   console.log(calculateExercises(trainingHours, target));
 } catch (error) {
@@ -75,3 +88,5 @@ try {
     console.log('Error:', error.message);
   }
 }
+
+export {};

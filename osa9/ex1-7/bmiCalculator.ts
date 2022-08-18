@@ -12,16 +12,29 @@ const calculateBmi = (height: number, weight: number): string => {
   if (bmi <= 16.9) return 'Underweight (Moderate thinness)';
   if (bmi <= 18.4) return 'Underweight (Mild thinness)';
   if (bmi <= 24.9) return 'Normal (healthy weight)';
-  if (bmi <= 29.9) return 'Overweight (Pre-obese)';
+  if (bmi <= 29.9) return 'Overweight';
   if (bmi <= 34.9) return 'Obese (Class I)';
   if (bmi <= 39.9) return 'Obese (Class II)';
 
   return 'Obese (Class III)';
 };
 
+interface parsedArguments {
+  height: number;
+  weight: number;
+}
+
+const parseArguments = (args: Array<string>): parsedArguments => {
+  if (args.length !== 4) throw new Error('Not enough arguments');
+
+  const height = Number(args[2]);
+  const weight = Number(args[3]);
+
+  return { height, weight };
+};
+
 try {
-  const height = 180;
-  const weight = 74;
+  const { height, weight } = parseArguments(process.argv);
 
   console.log(calculateBmi(height, weight));
 } catch (error: unknown) {
@@ -29,3 +42,5 @@ try {
     console.log('Error:', error.message);
   }
 }
+
+export {};
