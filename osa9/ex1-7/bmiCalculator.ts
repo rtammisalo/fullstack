@@ -1,4 +1,4 @@
-const calculateBmi = (height: number, weight: number): string => {
+export const calculateBmi = (height: number, weight: number): string => {
   const heightMeters = height / 100;
 
   if (heightMeters <= 0) throw new Error('Height cannot be zero or less');
@@ -33,14 +33,18 @@ const parseArguments = (args: Array<string>): parsedArguments => {
   return { height, weight };
 };
 
-try {
-  const { height, weight } = parseArguments(process.argv);
+const start = () => {
+  try {
+    const { height, weight } = parseArguments(process.argv);
 
-  console.log(calculateBmi(height, weight));
-} catch (error: unknown) {
-  if (error instanceof Error) {
-    console.log('Error:', error.message);
+    console.log(calculateBmi(height, weight));
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.log('Error:', error.message);
+    }
   }
-}
+};
 
-export {};
+if (process.argv.length > 2 && process.argv[1].includes('bmiCalculator.ts')) {
+  start();
+}
