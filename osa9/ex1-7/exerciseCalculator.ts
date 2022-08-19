@@ -27,7 +27,7 @@ const calculateRating = (average: number, target: number): Rating => {
   return { rating: 3, ratingDescription: 'good job!' };
 };
 
-const calculateExercises = (
+export const calculateExercises = (
   trainingHours: Array<number>,
   target: number
 ): Result => {
@@ -79,14 +79,18 @@ const parseArguments = (args: Array<string>): parsedArguments => {
   return { trainingHours, target };
 };
 
-try {
-  const { trainingHours, target } = parseArguments(process.argv);
+const start = () => {
+  try {
+    const { trainingHours, target } = parseArguments(process.argv);
 
-  console.log(calculateExercises(trainingHours, target));
-} catch (error) {
-  if (error instanceof Error) {
-    console.log('Error:', error.message);
+    console.log(calculateExercises(trainingHours, target));
+  } catch (error) {
+    if (error instanceof Error) {
+      console.log('Error:', error.message);
+    }
   }
-}
+};
 
-export {};
+if (process.argv.length > 2 && process.argv[1].includes('exerciseCalculator.ts')) {
+  start();
+}
