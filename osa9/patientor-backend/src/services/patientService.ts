@@ -6,11 +6,7 @@ const getAll = (): Array<Patient> => {
 };
 
 const getAllWithoutSsn = (): Array<PatientWithoutSsn> => {
-  return patients.map((patient) => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { ssn, ...patientWithoutSsn } = patient;
-    return patientWithoutSsn;
-  });
+  return patients.map(({ ssn: _ssn, ...patientWithoutSsn }) => patientWithoutSsn);
 };
 
 export default { getAll, getAllWithoutSsn };
