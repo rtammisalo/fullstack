@@ -1,1 +1,28 @@
 GET http://localhost:3001/api/patients
+
+
+/// Add patients
+
+###
+POST http://localhost:3001/api/patients
+Content-Type: application/json
+
+{
+  "name": "Sandy Frank",
+  "dateOfBirth": "1929-07-11",
+  "ssn": "110729-123A",
+  "gender": "male",
+  "occupation": "Producer"
+}
+
+###
+POST http://localhost:3001/api/patients
+Content-Type: application/json
+
+{
+  "name": "Gnorts Mr. Alien",
+  "dateOfBirth": "1930-08-05",
+  "ssn": "050830-999Z",
+  "gender": "other",
+  "occupation": "Astronaut"
+}
