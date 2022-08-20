@@ -1,11 +1,10 @@
 import express from 'express';
-import bodyParser from 'body-parser';
 import { calculateBmi } from './bmiCalculator';
 import { calculateExercises } from './exerciseCalculator';
 
 const app = express();
 
-app.use(bodyParser.json()); // req.body is undefined without this
+app.use(express.json()); // req.body is undefined without this
 
 app.get('/hello', (_req, res) => {
   res.send('Hello Full Stack!');
