@@ -1,6 +1,6 @@
-import express from "express";
-import patientService from "../services/patientService";
-import toNewPatient from "../utils";
+import express from 'express';
+import patientService from '../services/patientService';
+import { toNewPatient } from '../utils';
 
 const router = express.Router();
 
@@ -11,9 +11,19 @@ router.get('/', (_req, res) => {
 });
 
 router.post('/', (req, res) => {
-  const newPatient = toNewPatient(req.body);
-  const savedPatient = patientService.addPatient(newPatient);
-  res.json(savedPatient);
+  try {
+    const newPatient = toNewPatient(req.body);
+    const savedPatient = patientService.addPatient(newPatient);
+    res.json(savedPatient);
+  } catch (error) {
+    let message = 'Failed to add new patient. ';
+
+    if (error instanceof Error) {
+      message += error.message;
+    }
+
+    res.status(400).send({ error: message });
+  }
 });
 
 export default router;

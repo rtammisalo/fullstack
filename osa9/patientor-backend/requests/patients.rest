@@ -26,3 +26,70 @@ Content-Type: application/json
   "gender": "other",
   "occupation": "Astronaut"
 }
+
+### Name missing
+POST http://localhost:3001/api/patients
+Content-Type: application/json
+
+{
+  "dateOfBirth": "1930-08-05",
+  "ssn": "050830-999Z",
+  "gender": "other",
+  "occupation": "Astronaut"
+}
+
+### date missing
+POST http://localhost:3001/api/patients
+Content-Type: application/json
+
+{
+  "name": "Gnorts Mr. Alien",
+  "ssn": "050830-999Z",
+  "gender": "other",
+  "occupation": "Astronaut"
+}
+
+### ssn missing
+POST http://localhost:3001/api/patients
+Content-Type: application/json
+
+{
+  "name": "Gnorts Mr. Alien",
+  "dateOfBirth": "1930-08-05",
+  "gender": "other",
+  "occupation": "Astronaut"
+}
+
+### gender missing
+POST http://localhost:3001/api/patients
+Content-Type: application/json
+
+{
+  "name": "Gnorts Mr. Alien",
+  "dateOfBirth": "1930-08-05",
+  "ssn": "050830-999Z",
+  "occupation": "Astronaut"
+}
+
+### occupation missing
+POST http://localhost:3001/api/patients
+Content-Type: application/json
+
+{
+  "name": "Gnorts Mr. Alien",
+  "dateOfBirth": "1930-08-05",
+  "ssn": "050830-999Z",
+  "gender": "other"
+}
+
+### Gender invalid
+POST http://localhost:3001/api/patients
+Content-Type: application/json
+
+{
+  "name": "Gnorts Mr. Alien",
+  "dateOfBirth": "1930-08-05",
+  "ssn": "050830-999Z",
+  "gender": "mies",
+  "occupation": "Astronaut"
+}
