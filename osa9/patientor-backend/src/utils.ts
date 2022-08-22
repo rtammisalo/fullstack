@@ -1,8 +1,9 @@
-import { NewPatient, Gender } from './types';
+import { NewPatient, Gender, Entry } from './types';
 
 const isString = (text: unknown): text is string => {
   return typeof text === 'string' || text instanceof String;
 };
+
 
 const parseName = (name: unknown): string => {
   if (!name || !isString(name)) {
@@ -57,6 +58,26 @@ const parseGender = (gender: unknown): Gender => {
   return gender;
 };
 
+const isEntry = (_entry: unknown): _entry is Entry => {
+  return true;
+};
+
+const isEntriesArray = (entries: unknown): entries is Array<Entry> => {
+  return entries instanceof Array && entries.every(entry => isEntry(entry));
+};
+
+const parseEntries = (entries: unknown): Array<Entry> => {
+  if (!entries) {
+    return [];
+  }
+
+  if (!isEntriesArray(entries)) {
+    throw new Error('Entries is not a valid list of entries');
+  }
+
+  return entries;
+};
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const toNewPatient = (data: any): NewPatient => {
   const newPatient: NewPatient = {
@@ -64,7 +85,8 @@ const toNewPatient = (data: any): NewPatient => {
     dateOfBirth: parseDateOfBirth(data.dateOfBirth),
     ssn: parseSsn(data.ssn),
     gender: parseGender(data.gender),
-    occupation: parseOccupation(data.occupation)
+    occupation: parseOccupation(data.occupation),
+    entries: parseEntries(data.entries)
   };
 
   return newPatient;
