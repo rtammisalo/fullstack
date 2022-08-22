@@ -7,7 +7,7 @@ interface TotalProps {
 const Total = (props: TotalProps) => {
   return (
     <p>
-      Number of exercises
+      Number of exercises{' '}
       {props.courseParts.reduce((carry, part) => carry + part.exerciseCount, 0)}
     </p>
   );
