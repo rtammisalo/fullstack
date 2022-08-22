@@ -6,7 +6,7 @@ import { Typography, List, ListItem } from "@material-ui/core";
 import FemaleIcon from '@mui/icons-material/Female';
 import MaleIcon from '@mui/icons-material/Male';
 
-import { useStateValue } from "../state";
+import { useStateValue, updatePatient } from "../state";
 import { Gender, Patient } from "../types";
 import { apiBaseUrl } from "../constants";
 
@@ -24,7 +24,7 @@ const PatientPage = () => {
     axios.get<Patient>(`${apiBaseUrl}/patients/${id}`)
       .then(result => result.data)
       .then(updatedPatient =>
-        dispatch({ type: "UPDATE_PATIENT", payload: updatedPatient }))
+        dispatch(updatePatient(updatedPatient)))
       .catch((error: unknown) => {
         if (axios.isAxiosError(error)) {
           console.error(error?.response?.data || "Unrecognized axios error");
