@@ -58,8 +58,20 @@ const parseGender = (gender: unknown): Gender => {
   return gender;
 };
 
-const isEntry = (_entry: unknown): _entry is Entry => {
-  return true;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const isEntry = (entry: any): entry is Entry => {
+  if (!entry || !entry.type || !isString(entry.type)) {
+    return false;
+  }
+
+  switch (entry.type) {
+    case 'HealthCheck':
+    case 'Hospital':
+    case 'OccupationalHealthcare':
+      return true;
+    default:
+      return false;
+  }
 };
 
 const isEntriesArray = (entries: unknown): entries is Array<Entry> => {
