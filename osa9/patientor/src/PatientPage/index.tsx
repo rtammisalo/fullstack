@@ -9,6 +9,7 @@ import MaleIcon from '@mui/icons-material/Male';
 import { useStateValue, updatePatient } from "../state";
 import { Gender, Patient } from "../types";
 import { apiBaseUrl } from "../constants";
+import EntryList from "./EntryList";
 
 const PatientPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -66,6 +67,7 @@ const PatientPage = () => {
         <ListItem>SSN: {patient.ssn}</ListItem>
         <ListItem>Occupation: {patient.occupation}</ListItem>
       </List>
+      <EntryList entries={patient.entries} />
     </div>
   );
 };
