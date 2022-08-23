@@ -1,6 +1,6 @@
 import { Typography, List } from "@material-ui/core";
 import { Entry } from '../types';
-import EntryListItem from './EntryListItem';
+import EntryListItem from "./EntryListItem";
 
 interface EntryListProps {
   entries: Array<Entry>;

@@ -1,36 +1,61 @@
-import { List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
-import Description from '@mui/icons-material/Description';
+import { Divider, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import { Entry } from '../types';
-import { useStateValue } from '../state';
+import { BusinessCenter, LocalHospital, PersonSearch } from "@mui/icons-material";
+import HospitalDetails from './HospitalDetails';
+import HealthCheckDetails from './HealthCheckDetails';
+import OccupationalHealthcareDetails from './OccupationalHealthcareDetails';
 
 interface EntryListItemProps {
   entry: Entry;
 }
 
+const assertNever = (item: never) => {
+  throw new Error('Switch case missing: ' + JSON.stringify(item));
+};
+
 const EntryListItem = ({ entry }: EntryListItemProps) => {
-  const [{ diagnoses }] = useStateValue();
   if (!entry) return null;
+
+  const EntryIcon = (entry: Entry) => {
+    switch (entry.type) {
+      case 'Hospital':
+        return <LocalHospital />;
+      case 'HealthCheck':
+        return <PersonSearch />;
+      case 'OccupationalHealthcare':
+        return <BusinessCenter />;
+      default:
+        assertNever(entry);
+    }
+  };
+
+  const EntryDetail = (entry: Entry) => {
+    switch (entry.type) {
+      case 'Hospital':
+        return <HospitalDetails key={entry.id} entry={entry} />;
+      case 'HealthCheck':
+        return <HealthCheckDetails key={entry.id} entry={entry} />;
+      case 'OccupationalHealthcare':
+        return <OccupationalHealthcareDetails key={entry.id} entry={entry} />;
+      default:
+        assertNever(entry);
+    }
+  };
 
   return (
     <ListItem alignItems="flex-start" style={{
-      display: 'grid', gridTemplateColumns: '40px auto',
+      border: 'solid', borderWidth: 2, borderRadius: 5,
+      display: 'grid', gridTemplateColumns: '40px auto', marginBottom: 5
     }} >
-      <div>
-        <ListItemIcon>
-          <Description />
-        </ListItemIcon>
-      </div>
+      <ListItemIcon>
+        {EntryIcon(entry)}
+      </ListItemIcon>
       <div style={{ marginTop: 5 }}>
-        <ListItemText primary={<>{entry.date} <i>{entry.description}</i></>} />
-        <List dense={true} >
-          {entry.diagnosisCodes?.map(code =>
-            <ListItem key={code}>
-              <ListItemText primary={code}
-                secondary={diagnoses[code].name}
-              />
-            </ListItem>
-          )}
-        </List>
+        <ListItemText><b>{entry.date}</b></ListItemText>
+        <ListItemText><i>{entry.description}</i></ListItemText>
+        {EntryDetail(entry)}
+        <Divider style={{ marginTop: 5 }} />
+        <ListItemText primary={<>diagnose by {entry.specialist}</>} />
       </div>
     </ListItem>
   );
