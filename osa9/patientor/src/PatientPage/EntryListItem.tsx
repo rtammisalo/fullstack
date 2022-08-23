@@ -4,6 +4,7 @@ import { BusinessCenter, LocalHospital, PersonSearch } from "@mui/icons-material
 import HospitalDetails from './HospitalDetails';
 import HealthCheckDetails from './HealthCheckDetails';
 import OccupationalHealthcareDetails from './OccupationalHealthcareDetails';
+import DiagnosisList from "./DiagnosisList";
 
 interface EntryListItemProps {
   entry: Entry;
@@ -53,6 +54,7 @@ const EntryListItem = ({ entry }: EntryListItemProps) => {
       <div style={{ marginTop: 5 }}>
         <ListItemText><b>{entry.date}</b></ListItemText>
         <ListItemText><i>{entry.description}</i></ListItemText>
+        <DiagnosisList diagnosisCodes={entry.diagnosisCodes} />
         {EntryDetail(entry)}
         <Divider style={{ marginTop: 5 }} />
         <ListItemText primary={<>diagnose by {entry.specialist}</>} />
