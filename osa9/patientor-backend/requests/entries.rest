@@ -90,8 +90,7 @@ Content-Type: application/json
   "date": "2022-08-24",
   "specialist": "MD Hayward",
   // "diagnosisCodes": [],
-  "type": "HealthCheck",
-  "healthCheckRating": 0
+  "type": "HealthCheck"
 }
 
 ### 
