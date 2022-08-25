@@ -1,3 +1,4 @@
+import diagnosisService from "../services/diagnosisService";
 import { Diagnosis, Discharge, EntryType, NewBaseEntry, NewEntry, SickLeave } from "../types";
 import { assertNever, isDate, isNumber, isString, isEntryType } from "./utils";
 
@@ -82,7 +83,8 @@ const parseSickLeave = (sickLeave: any): SickLeave => {
 };
 
 const isDiagnosisCode = (diagnosisCode: unknown): diagnosisCode is string => {
-  if (!diagnosisCode || !isString(diagnosisCode)) {
+  if (!diagnosisCode || !isString(diagnosisCode)
+    || !diagnosisService.getAll().find(d => d.code === diagnosisCode)) {
     throw new Error('Diagnosis code is missing or not a valid value');
   }
 

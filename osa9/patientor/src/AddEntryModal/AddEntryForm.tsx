@@ -129,7 +129,7 @@ export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
       validate={(values) => {
         const requiredError = "Field is required";
         const errors: { [field: string]: { [field: string]: string } | string } = {};
-        
+
         if (!values.description) {
           errors.description = requiredError;
         }
@@ -166,6 +166,10 @@ export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
           case EntryType.OccupationalHealthcare:
             if (!values.employerName) {
               errors.employerName = requiredError;
+            }
+
+            if (!values.sickLeave?.startDate && !values.sickLeave?.endDate) {
+              break;
             }
 
             const sickLeaveErrors: { [field: string]: string } = {};
