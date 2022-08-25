@@ -7,13 +7,13 @@ import {
   TextField as TextFieldMUI,
   Typography,
 } from "@material-ui/core";
-import { Diagnosis, Gender } from "../types";
+import { Diagnosis, EntryType, Gender, HealthCheckRating } from "../types";
 import { InputLabel } from "@material-ui/core";
 import Input from '@material-ui/core/Input';
 
 // structure of a single option
-export type GenderOption = {
-  value: Gender;
+export type SelectFieldOption = {
+  value: Gender | HealthCheckRating | EntryType;
   label: string;
 };
 
@@ -21,29 +21,40 @@ export type GenderOption = {
 type SelectFieldProps = {
   name: string;
   label: string;
-  options: GenderOption[];
+  options: SelectFieldOption[];
+  onChange?: (event: React.ChangeEvent<{ value: unknown }>) => void;
+  value?: EntryType;
 };
 
 const FormikSelect = ({ field, ...props }: FieldProps) => <Select {...field} {...props} />;
 
-export const SelectField = ({ name, label, options }: SelectFieldProps) => (
-  <>
-    <InputLabel>{label}</InputLabel>
-    <Field
-      fullWidth
-      style={{ marginBottom: "0.5em" }}
-      label={label}
-      component={FormikSelect}
-      name={name}
-    >
-      {options.map((option) => (
-        <MenuItem key={option.value} value={option.value}>
-          {option.label || option.value}
-        </MenuItem>
-      ))}
-    </Field>
-  </>
-);
+export const SelectField = ({ name, label, options, onChange, value }: SelectFieldProps) => {
+  const valueFields = onChange && value
+    ? { onChange: onChange, value: value }
+    : {};
+
+  const DisplayField = () => (
+    <>
+      <InputLabel>{label}</InputLabel>
+      <Field
+        fullWidth
+        style={{ marginBottom: "0.5em" }}
+        label={label}
+        component={FormikSelect}
+        name={name}
+        {...valueFields}
+      >
+        {options.map((option) => (
+          <MenuItem key={option.value} value={option.value}>
+            {option.label || option.value}
+          </MenuItem>
+        ))}
+      </Field>
+    </>
+  );
+
+  return <DisplayField />;
+};
 
 interface TextProps extends FieldProps {
   label: string;
@@ -91,7 +102,7 @@ export const NumberField = ({ field, label, min, max }: NumberProps) => {
           if (value > max) setValue(max);
           else if (value <= min) setValue(min);
           else setValue(Math.floor(value));
-      }}
+        }}
       />
       <Typography variant="subtitle2" style={{ color: "red" }}>
         <ErrorMessage name={field.name} />
@@ -111,10 +122,10 @@ export const DiagnosisSelection = ({
 }) => {
   const [selectedDiagnoses, setDiagnoses] = useState<string[]>([]);
   const field = "diagnosisCodes";
-  const onChange = (data: string[]) => {    
+  const onChange = (data: string[]) => {
     setDiagnoses([...data]);
     setFieldTouched(field, true);
-    setFieldValue(field, selectedDiagnoses);
+    setFieldValue(field, [...data]);
   };
 
   const stateOptions = diagnoses.map((diagnosis) => ({

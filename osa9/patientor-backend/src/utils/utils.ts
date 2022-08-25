@@ -1,6 +1,6 @@
 import { EntryType } from "../types";
 
-const assertNever = (item: never, message: string): never => {
+const assertNever = (message: string, item: never): never => {
   throw new Error(message + JSON.stringify(item));
 };
 

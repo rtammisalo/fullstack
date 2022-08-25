@@ -1,45 +1,42 @@
 import { Divider, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
-import { Entry } from '../types';
+import { Entry, EntryType } from '../types';
 import { BusinessCenter, LocalHospital, PersonSearch } from "@mui/icons-material";
 import HospitalDetails from './HospitalDetails';
 import HealthCheckDetails from './HealthCheckDetails';
 import OccupationalHealthcareDetails from './OccupationalHealthcareDetails';
 import DiagnosisList from "./DiagnosisList";
+import { assertNever } from "../utils";
 
 interface EntryListItemProps {
   entry: Entry;
 }
-
-const assertNever = (item: never) => {
-  throw new Error('Switch case missing: ' + JSON.stringify(item));
-};
 
 const EntryListItem = ({ entry }: EntryListItemProps) => {
   if (!entry) return null;
 
   const EntryIcon = (entry: Entry) => {
     switch (entry.type) {
-      case 'Hospital':
+      case EntryType.Hospital:
         return <LocalHospital />;
-      case 'HealthCheck':
+      case EntryType.HealthCheck:
         return <PersonSearch />;
-      case 'OccupationalHealthcare':
+      case EntryType.OccupationalHealthcare:
         return <BusinessCenter />;
       default:
-        assertNever(entry);
+        return assertNever(entry);
     }
   };
 
   const EntryDetail = (entry: Entry) => {
     switch (entry.type) {
-      case 'Hospital':
+      case EntryType.Hospital:
         return <HospitalDetails key={entry.id} entry={entry} />;
-      case 'HealthCheck':
+      case EntryType.HealthCheck:
         return <HealthCheckDetails key={entry.id} entry={entry} />;
-      case 'OccupationalHealthcare':
+      case EntryType.OccupationalHealthcare:
         return <OccupationalHealthcareDetails key={entry.id} entry={entry} />;
       default:
-        assertNever(entry);
+        return assertNever(entry);
     }
   };
 

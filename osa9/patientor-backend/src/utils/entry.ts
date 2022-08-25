@@ -145,7 +145,7 @@ const toNewEntry = (data: any): NewEntry => {
       };
       break;
     default:
-      return assertNever(type, 'Unchecked EntryType:');
+      return assertNever('Unchecked EntryType:', type);
   }
 
   return newEntry;
