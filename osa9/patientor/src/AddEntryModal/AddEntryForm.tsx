@@ -6,6 +6,7 @@ import { useStateValue } from "../state";
 import { Entry, EntryType, HealthCheckRating } from "../types";
 import { assertNever } from "../utils";
 import { HealthCheckFields, HospitalFields, OccupationalHealthcareFields } from "./Fields";
+import { dateValidator, FormErrors, hospitalEntryValidator, occupationalHealthcareValidator } from './validators';
 
 // Define special omit for unions, from course materials (Part 9d).
 type UnionOmit<T, K extends string | number | symbol> = T extends unknown ? Omit<T, K> : never;
@@ -128,15 +129,13 @@ export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
       onSubmit={submitSelectedEntry}
       validate={(values) => {
         const requiredError = "Field is required";
-        const errors: { [field: string]: { [field: string]: string } | string } = {};
+        const errors: FormErrors = {};
 
         if (!values.description) {
           errors.description = requiredError;
         }
 
-        if (!values.date) {
-          errors.date = requiredError;
-        }
+        dateValidator(values.date, errors);
 
         if (!values.specialist) {
           errors.specialist = requiredError;
@@ -144,19 +143,7 @@ export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
 
         switch (values.type) {
           case EntryType.Hospital:
-            const hospitalErrors: { [field: string]: string } = {};
-
-            if (!values.discharge.date) {
-              hospitalErrors.date = requiredError;
-            }
-            if (!values.discharge.criteria) {
-              hospitalErrors.criteria = requiredError;
-            }
-
-            if (Object.entries(hospitalErrors).length) {
-              errors.discharge = hospitalErrors;
-            }
-
+            hospitalEntryValidator(values, errors);
             break;
           case EntryType.HealthCheck:
             if (!(Object.values(HealthCheckRating).includes(values.healthCheckRating))) {
@@ -164,28 +151,7 @@ export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
             }
             break;
           case EntryType.OccupationalHealthcare:
-            if (!values.employerName) {
-              errors.employerName = requiredError;
-            }
-
-            if (!values.sickLeave?.startDate && !values.sickLeave?.endDate) {
-              break;
-            }
-
-            const sickLeaveErrors: { [field: string]: string } = {};
-
-            if (!values.sickLeave?.startDate) {
-              sickLeaveErrors.startDate = requiredError;
-            }
-
-            if (!values.sickLeave?.endDate) {
-              sickLeaveErrors.endDate = requiredError;
-            }
-
-            if (Object.entries(sickLeaveErrors).length) {
-              errors.sickLeave = sickLeaveErrors;
-            }
-
+            occupationalHealthcareValidator(values, errors);
             break;
           default:
             return assertNever(values);
