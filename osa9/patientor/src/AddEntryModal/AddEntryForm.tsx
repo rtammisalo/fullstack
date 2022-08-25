@@ -12,21 +12,6 @@ import { dateValidator, FormErrors, hospitalEntryValidator, occupationalHealthca
 type UnionOmit<T, K extends string | number | symbol> = T extends unknown ? Omit<T, K> : never;
 export type EntryFormValues = UnionOmit<Entry, 'id'>;
 
-// description: string;
-// date: string;
-// specialist: string;
-// diagnosisCodes?: Array<Diagnosis['code']>;
-
-// type: EntryType.HealthCheck;
-// healthCheckRating: HealthCheckRating;
-
-// type: EntryType.OccupationalHealthcare;
-// employerName: string;
-// sickLeave?: SickLeave; startDate - endDate
-
-// type: EntryType.Hospital;
-// discharge: Discharge; date, criteria
-
 interface Props {
   onSubmit: (values: EntryFormValues) => void;
   onCancel: () => void;
