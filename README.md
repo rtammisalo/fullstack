@@ -9,3 +9,4 @@
 - [Osa 6 tehtävät](/osa6)
 - [Osa 7 tehtävät](/osa7)
 - [Osa 8 tehtävät](/osa8)
+- [Part 9 exercises](/osa9)
